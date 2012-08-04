@@ -117,7 +117,10 @@ function extra_processing($agency_id){
             WHERE s.trip_id = t.trip_id;";
     mysql_query($q);    //stops can now always be joined using the (optional) block
     
-    
-    
+    /*********
+        mistake in GTFS file for June 2012 - missing stop_time for block_id 1071
+    ********/
+    mysql_query("INSERT INTO stop_times (agency_id, trip_id, block_id, stop_sequence, stop_id, arrival_time, departure_time) 
+                    VALUES ('SEPTA', 'CYN_1071_V5', '1071', 1, '90005', '12:19:00', '12:19:00' )");
 }
 ?>
