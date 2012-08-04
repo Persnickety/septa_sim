@@ -58,7 +58,11 @@
         <div class="span8">This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  This is a test.  </div>
 
         <div class="span4">
-          <div class="well"></div>
+          <div class="well">
+			<ol class="train-schedule">
+				
+			</ol>
+		  </div>
         </div>
       </div>
 
@@ -80,6 +84,18 @@
 <!--    <script src="libs/bootstrap/js/bootstrap-collapse.js"></script>-->
 <!--    <script src="libs/bootstrap/js/bootstrap-carousel.js"></script>-->
 <!--    <script src="libs/bootstrap/js/bootstrap-typeahead.js"></script>-->
+<script src="js/views/schedulelist.js"></script>
+<script>
+$(function(){
+		var trainCollection = new SeptaSim.TrainCollection();
+		
+		var allSchedulesView = new SeptaSim.AllSchedulesView({
+									collection: trainCollection
+								});
+		
+		allSchedulesView.render();
+	});
+</script>
 
   </body>
 </html>
