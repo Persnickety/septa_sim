@@ -12,6 +12,11 @@ var SeptaSim = SeptaSim || {};
 											this.selected = true;
 											this.trigger('select');
 										},
+
+										deselect: function() {
+											this.selected = false;
+											this.trigger('select');
+										},
 										
 										updatePosition: function(stationCollection, time){
 															var schedule = this.get('schedule');

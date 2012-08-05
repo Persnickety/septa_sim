@@ -12,11 +12,11 @@ var SeptaSim = SeptaSim || {};
 		},
 		
 		onTripChange: function() {
-			this.render()
+			this.render();
 		},
 
 		onTripSelect: function() {
-
+			this.render();
 		},
 		
 		events : {
@@ -27,15 +27,20 @@ var SeptaSim = SeptaSim || {};
 
 		onAddTime: function() {
 			this.model.changeSchedule(this.model.toStation.id, 1);
+			return false;  // Keep event from bubbling up.
 		},
 
 		onSubtractTime: function() {
 			this.model.changeSchedule(this.model.toStation.id, -1);
+			return false;  // Keep event from bubbling up.
 		},
 
 		onTripRowClick : function() {
-			// pass the relevant row model to the parent AllTripsView
-			//this.parent.analyzeCellClick(this.model);
+			if (!this.model.selected) {
+				this.model.select();
+			} else {
+				this.model.deselect();
+			}
 		},
 		
 		tagName: 'tr',
@@ -52,15 +57,17 @@ var SeptaSim = SeptaSim || {};
 				var arrivalTime = this.model.get('arrivalTime');
 			
 				var $el = this.$el;
-				//$el.html('<tr></tr>');
-				//this.collection.each(function(train) {
-					$el.append('<td>'+ routeName +'</td>');
-					$el.append('<td>'+ tripID +'</td>');
-					$el.append('<td>'+ nextStation +'</td>');
-					$el.append('<td>'+ arrivalTime +'</td>');
-					$el.append('<td><button class="add-time">+</button></td><td><button class="subtract-time">&ndash;</button></td>');
-				//});
+				$el.append('<td>'+ routeName +'</td>');
+				$el.append('<td>'+ tripID +'</td>');
+				$el.append('<td>'+ nextStation +'</td>');
+				$el.append('<td>'+ arrivalTime +'</td>');
+				$el.append('<td><button class="add-time">+</button></td><td><button class="subtract-time">&ndash;</button></td>');
 
+				if (this.model.selected) {
+					$el.find('td').css({'background-color': 'yellow'});
+				}
+
+				// Show the element if it's active but not visible.
 				if (!this.visible) {
 					this.visible = true;
 					$el.appendTo(this.options.parentView.$el).hide();
@@ -71,6 +78,7 @@ var SeptaSim = SeptaSim || {};
 				var $el = this.$el;
 				var self = this;
 
+				// Hide the element if it's not active, and it's visible.
 				if (this.visible) {
 					self.visible = false;
 					$el.fadeOut('slow', function() { $el.remove(); });

@@ -15,25 +15,32 @@ var SeptaSim = SeptaSim || {};
 		},
 
 		onVehicleChange: function() {
-			this.render()
+			this.render();
 		},
 
 		onVehicleSelect: function() {
+			if (this.model.selected) {
+				this.flashMarker();
+			}
+			this.render();
+		},
+
+		flashMarker: function() {
 
 		},
 
 		createMarker: function(coords, isOutbound) {
 			this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
 						stroke: 'none',
-						fill: (isOutbound ? 'green': 'red'),
+						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
 					});
 		},
 
 		createText: function(coords, isOutbound, displayString) {
 			this.text = this.paper.text(coords.x, coords.y, displayString).attr({
 						stroke: 'none',
-						fill: (isOutbound ? 'green': 'red'),
-						'text-size': 1
+						'text-size': 1,
+						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
 					});
 			this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
 		},
@@ -42,7 +49,7 @@ var SeptaSim = SeptaSim || {};
 			this.marker.attr({
 						cx: coords.x,
 						cy: coords.y,
-						fill: (isOutbound ? 'green': 'red')
+						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
 					});
 		},
 
@@ -50,8 +57,8 @@ var SeptaSim = SeptaSim || {};
 			this.text.attr({
 						x: coords.x,
 						y: coords.y,
-						fill: (isOutbound ? 'green': 'red'),
-						transform: ''
+						transform: '',
+						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
 					});
 			this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
 		},
@@ -80,17 +87,17 @@ var SeptaSim = SeptaSim || {};
 				// If we don't have a marker yet...
 				if (this.marker === null) {
 					this.createMarker(coords, is_outbound);
-					this.createText(coords, is_outbound, block_id);
+//					this.createText(coords, is_outbound, block_id);
 
 				// If we already have a marker...
 				} else {
 					this.updateMarker(coords, is_outbound);
-					this.updateText(coords, is_outbound, block_id);
+//					this.updateText(coords, is_outbound, block_id);
 				}
 
 			} else {
 				this.removeMarker();
-				this.removeText();
+//				this.removeText();
 			}
 		}
 	});
