@@ -13,7 +13,7 @@
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
-	  
+
 	  #tip{
 		 position : absolute;
 		 border : 1px solid gray;
@@ -67,7 +67,7 @@
       <div class="row">
         <div class="span8">
         	<div class="row controls-row">
-        	
+
 		      	<div class="span1">
 		      		<span id="septa-time-display">3:00</span>
 		      	</div>
@@ -76,7 +76,7 @@
 			      	<input id="septa-time-slider" type="range" min="0" max="1440" value="0"" step="1"
 			      	  style="width: 100%">
 			      </div>
-			      
+
 		      	<div class="span1">
 			      	<button type="button" id="septa-play-button">Play</button>
 			      </div>
@@ -93,24 +93,24 @@
         		<form action="../save_to_file.php" method="POST">
         			Service Type:
         			<select name="service_id" class="input-small" style="margin-bottom: 0px;">
-        				<options value="S1" selected="selected">Weekdays</options>
-        				<options value="S2">Saturday</options>
-        				<options value="S3">Sunday/Holiday</options>
-        				<options value="S4">Friday Night</options>
+        				<option value="S1" selected="selected">Weekdays</option>
+        				<option value="S2">Saturday</option>
+        				<option value="S3">Sunday/Holiday</option>
+        				<option value="S4">Friday Night</option>
         			</select>
         			<input type="hidden" name="deltas" value="[[], []]">
         			<button type="submit" class="btn">Save Changes to File</button>
         		</form>
         	</div>
-        	
+
           <div class="">
 			<div id="train-schedule">
-				
+
 			</div>
 		  </div>
         </div>
       </div>
-	  
+
 	  <div id="tip"></div>​
 
     </div> <!-- /container -->
@@ -152,11 +152,11 @@
 <script>
 $(function(){
 		trainCollection = new SeptaSim.TrainCollection(SCHEDULE_S1);
-//		
+//
 //		var allSchedulesView = new SeptaSim.AllSchedulesView({
 //									collection: trainCollection
 //								});
-		
+
 //		allSchedulesView.render();
 
 		stationCollection = new SeptaSim.StationCollection(STATION_LOCATIONS);
@@ -169,11 +169,11 @@ $(function(){
 			trainCollection: trainCollection,
 			stationCollection: stationCollection
 		});
-		
+
 		allTripsView = new SeptaSim.AllTripsView({
 			trainCollection: trainCollection
 		});
-		
+
 		septaMapView.render();
 		allTripsView.render();
 	});
