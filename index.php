@@ -7,15 +7,9 @@
 </head>
 <body>
     <h1>SEPTA sim</h1>
-    <h2>Back end scripts</h2>
     <ul>
-        <li><a href='station_locations.php'>Station Locations</a></li>
-        <li><a href='stations_by_route.php'>Stations By Route</a></li>
-        <li><a href='json_schedule_info.php'>Schedule info</a></li>
-    </ul>
-    <h2>Front end</h2>
-    <ul>
-        <li><a href='UI/index.html'>index</a></li>
+        <li><a href='parse_gtfs_and_write.php'>Back end :Parse a GTFS and write data to .js files</a></li>
+        <li><a href='UI/index.html'>Front end: Simulate!</a></li>
     </ul>
 </body>
 </html>
