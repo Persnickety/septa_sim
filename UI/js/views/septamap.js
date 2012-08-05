@@ -2,28 +2,6 @@ var SeptaSim = SeptaSim || {};
 
 (function(S, $)
 {
-	S.TimeSliderView = Backbone.View.extend({
-		initialize: function() {
-			var $slider = $('#septa-time-slider');
-			this.trainCollection = this.options.trainCollection;
-			this.stationCollection = this.options.stationCollection;
-			$slider.change(_.bind(this.onSliderChange, this));
-
-			var play = function() {
-				$slider.val($slider.val()*1 + 1).change();
-				_.delay(play, 100);
-			}
-
-			play();
-		},
-
-		onSliderChange: function(evt) {
-			var $slider = $(evt.target);
-			this.trainCollection.currentTime = $slider.val();
-			this.trainCollection.updateAllTrainPositions(this.stationCollection);
-		}
-	});
-
 
 	S.VehicleMarkerView = Backbone.View.extend({
 		initialize: function() {
