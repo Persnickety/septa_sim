@@ -6,7 +6,7 @@ var SeptaSim = SeptaSim || {};
 	var STOP_ID = 0;
 	
 	S.Train = Backbone.Model.extend({
-										idAttribute: "block_id",
+										idAttribute: "trip_id",
 										
 										updatePosition: function(stationCollection, time){
 															var schedule = this.get('schedule');
