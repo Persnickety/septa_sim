@@ -48,7 +48,7 @@ var SeptaSim = SeptaSim || {};
 																this.set('trenton?', false, {silent: true});
 															}
 															
-															var timeInSeconds = (toStationInfo[ARRIVAL_TIME]*1 / 60)*1 + 3;
+															var timeInSeconds = toStationInfo[ARRIVAL_TIME]*60;
 															var timeObj = secondsToTime(timeInSeconds);
 															var timeString = timeObj.h + ":" + timeObj.m + ":" + timeObj.s;
 															
