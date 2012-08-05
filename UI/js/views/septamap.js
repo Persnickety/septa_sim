@@ -87,7 +87,7 @@ var SeptaSim = SeptaSim || {};
 							});
 
 							this.stationMarkers = stationMarkers;
-							this.drawRoutes(STATIONS_BY_ROUTE_BLOB);
+							this.drawRoutes(STATIONS);
 
 							var vehicleMarkerViews = [];
 							var self = this;

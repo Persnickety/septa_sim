@@ -98,13 +98,13 @@
 <script src="js/views/schedulelist.js"></script>
 <script src="js/views/septamap.js"></script>
 
-<script src="data/json_schedule_info.js"></script>
+<script src="data/schedule_S1.js"></script>
 <script src="data/station_locations.js"></script>
 <script src="data/stations_by_route.js"></script>
 
 <script>
 $(function(){
-		trainCollection = new SeptaSim.TrainCollection(SCHEDULE_INFO_BLOB);
+		trainCollection = new SeptaSim.TrainCollection(SCHEDULE_S1);
 //		
 //		var allSchedulesView = new SeptaSim.AllSchedulesView({
 //									collection: trainCollection
@@ -112,7 +112,7 @@ $(function(){
 		
 //		allSchedulesView.render();
 
-		stationCollection = new SeptaSim.StationCollection(STATION_LOCATIONS_BLOB);
+		stationCollection = new SeptaSim.StationCollection(STATION_LOCATIONS);
 
 		septaMapView = new SeptaSim.SeptaMapView({
 			trainCollection: trainCollection,
