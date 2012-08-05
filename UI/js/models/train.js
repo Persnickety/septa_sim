@@ -16,6 +16,7 @@ var SeptaSim = SeptaSim || {};
 															
 															for(var i=0; i<schedule.length; i++)
 															{
+//																console.log(time, schedule[i][ARRIVAL_TIME])
 																if(schedule[i][ARRIVAL_TIME] >= time)
 																{
 																	toStationInfo = schedule[i];
@@ -24,8 +25,12 @@ var SeptaSim = SeptaSim || {};
 																
 																fromStationInfo = schedule[i];
 															}
+
+															if (toStationInfo == undefined ||
+															    fromStationInfo == toStationInfo) return;
+															console.log(fromStationInfo, toStationInfo);
 															
-															var timeInterval = (time - fromStationInfo.arrival_time) / (toStationInfo.arrival_time - fromStationInfo.arrival_time);
+															var timeInterval = (time - fromStationInfo[ARRIVAL_TIME]) / (toStationInfo[ARRIVAL_TIME] - fromStationInfo[ARRIVAL_TIME]);
 															var fromStation = stationCollection.get(fromStationInfo[STOP_ID]);
 															var toStation = stationCollection.get(toStationInfo[STOP_ID]);
 															var newLocation = stationCollection.getInterpolatedLocation(fromStation, toStation, timeInterval);
@@ -64,6 +69,10 @@ var SeptaSim = SeptaSim || {};
 					currentTime: 0,
 					model: S.Train,
 					updateAllTrainPositions : function(stationCollection) {
+						var time = this.currentTime;
+						this.each(function(train) {
+							train.updatePosition(stationCollection, time);
+						})
 					}
 				});
 

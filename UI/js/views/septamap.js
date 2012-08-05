@@ -2,6 +2,33 @@ var SeptaSim = SeptaSim || {};
 
 (function(S, $)
 {
+	S.VehicleMarkerView = Backbone.View.extend({
+		initialize: function() {
+			this.paper = this.options.paper;
+			this.mapView = this.options.mapView;
+			this.model.bind('change', this.onVehicleChange, this);
+			this.marker = null;
+		},
+
+		onVehicleChange: function() {
+			this.render()
+		},
+
+		render: function() {
+			var trainLocation = this.model.get('location');
+			var coords = this.mapView.toMapCoords(trainLocation.lat, trainLocation.lon);
+
+			if (this.marker === null) {
+				this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
+					stroke: 'none',
+					fill: 'red'
+				});
+			} else {
+				this.marker.attr({cx: coords.x, cy: coords.y});
+			}
+		}
+	});
+	
 	S.SeptaMapView = Backbone.View.extend({
 						initialize: function() {
 
@@ -45,8 +72,6 @@ var SeptaSim = SeptaSim || {};
 //									}
 //							);
 
-							mapSet = paper.set();
-
 							var lats = this.stationCollection.pluck('stop_lat');
 							var lons = this.stationCollection.pluck('stop_lon');
 							this.setViewBox(_.min(lats), _.min(lons), _.max(lats), _.max(lons));
@@ -58,12 +83,48 @@ var SeptaSim = SeptaSim || {};
 									'fill': 'black'
 								});
 
-								mapSet.push(marker);
 								stationMarkers[station] = marker;
 							});
 
 							this.stationMarkers = stationMarkers;
-							
+							this.drawRoutes(STATIONS_BY_ROUTE_BLOB);
+
+							var vehicleMarkerViews = [];
+							var self = this;
+							this.trainCollection.each(function(train) {
+								var view = new S.VehicleMarkerView({
+									paper: paper,
+									mapView: self,
+									model: train
+								});
+								vehicleMarkerViews[train] = view;
+							});
+							this.vehicleMarkerViews = vehicleMarkerViews;
+						},
+
+						drawRoutes: function(stations_by_route) {
+							var stationCollection = this.stationCollection;
+							var toMapCoords = this.toMapCoords;
+							var paper = this.paper;
+
+							for (route_id in stations_by_route) {
+								var pathCoords = '';
+
+								_.each(stations_by_route[route_id], function(stop_id) {
+									var station = stationCollection.get(stop_id);
+									coords = toMapCoords(station.get('stop_lat'), station.get('stop_lon'));
+
+									if (pathCoords === '') {
+										pathCoords += 'M' + coords.x + ' ' + coords.y;
+									} else {
+										pathCoords += 'L' + coords.x + ' ' + coords.y;
+									}
+								});
+
+								paper.path(pathCoords).attr({
+									'stroke-width': 0.2
+								});
+							}
 						}
 					});
 	

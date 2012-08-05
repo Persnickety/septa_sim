@@ -1,18 +1,23 @@
 SeptaSim = SeptaSim || {}
 
+function toRad(degree) {
+    return degree * Math.PI / 180;
+  }
+  
+function toDeg(radian) {
+    return radian * 180 / Math.PI;
+  }
+  
 function getBearing(lat1, lon1, lat2, lon2)
 {
 var dLon = toRad((lon2-lon1));
 var y = Math.sin(dLon) * Math.cos(lat2);
 var x = Math.cos(lat1)*Math.sin(lat2) -
         Math.sin(lat1)*Math.cos(lat2)*Math.cos(dLon);
-var brng = Math.atan2(y, x).toDeg();
+var brng = toDeg(Math.atan2(y, x));
+return brng;
 }
 
-function toRad(degree) {
-    return degree * Math.PI / 180;
-  }
-  
 function getDistance(fromLat, fromLon, toLat, toLon)
 {
 	var R = 6371; // km
@@ -31,16 +36,18 @@ function getDistance(fromLat, fromLon, toLat, toLon)
 
 function getInterpolatedLocation(fromLat, fromLon, toLat, toLon, timeInterval)
 {
-	var R = 6371; // km
-	var d = getDistance(fromLat, fromLon, toLat, toLon) * timeInterval;
-	
-	var brng = getBearing(fromLat, fromLon, toLat, toLon);
-	
-	var lat2 = Math.asin( Math.sin(fromLat)*Math.cos(d/R) + 
-              Math.cos(fromLat)*Math.sin(d/R)*Math.cos(brng) );
+//	var R = 6371; // km
+//	var d = getDistance(fromLat, fromLon, toLat, toLon) * timeInterval;
+//	
+//	var brng = getBearing(fromLat, fromLon, toLat, toLon);
+//	
+//	var lat2 = Math.asin( Math.sin(fromLat)*Math.cos(d/R) + 
+//              Math.cos(fromLat)*Math.sin(d/R)*Math.cos(brng) );
 
-	var lon2 = lon1 + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(fromLat), 
-                     Math.cos(d/R)-Math.sin(fromLat)*Math.sin(lat2));
-					 
+//	var lon2 = fromLon + Math.atan2(Math.sin(brng)*Math.sin(d/R)*Math.cos(fromLat), 
+//                     Math.cos(d/R)-Math.sin(fromLat)*Math.sin(lat2));
+
+	var lat2 = fromLat;
+	var lon2 = fromLon;					 
 	return { lat: lat2, lon: lon2 };
 }

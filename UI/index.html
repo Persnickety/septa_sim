@@ -104,7 +104,7 @@
 
 <script>
 $(function(){
-		var trainCollection = new SeptaSim.TrainCollection(SCHEDULE_INFO_BLOB);
+		trainCollection = new SeptaSim.TrainCollection(SCHEDULE_INFO_BLOB);
 //		
 //		var allSchedulesView = new SeptaSim.AllSchedulesView({
 //									collection: trainCollection
@@ -112,7 +112,7 @@ $(function(){
 		
 //		allSchedulesView.render();
 
-		var stationCollection = new SeptaSim.StationCollection(STATION_LOCATIONS_BLOB);
+		stationCollection = new SeptaSim.StationCollection(STATION_LOCATIONS_BLOB);
 
 		septaMapView = new SeptaSim.SeptaMapView({
 			trainCollection: trainCollection,
