@@ -90,6 +90,20 @@
         </div>
 
         <div class="span4">
+        	<div>
+        		<form action="../save_to_file.php" method="POST">
+        			Service Type:
+        			<select name="service_id" class="input-small" style="margin-bottom: 0px;">
+        				<options value="S1" selected="selected">Weekdays</options>
+        				<options value="S2">Saturday</options>
+        				<options value="S3">Sunday/Holiday</options>
+        				<options value="S4">Friday Night</options>
+        			</select>
+        			<input type="hidden" name="deltas" value="[[], []]">
+        			<button type="submit" class="btn">Save Changes to File</button>
+        		</form>
+        	</div>
+        	
           <div class="">
 			<div id="train-schedule">
 				
