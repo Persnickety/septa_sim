@@ -13,19 +13,25 @@ var SeptaSim = SeptaSim || {};
 		},
 		
 		render: function() {
-			var routeName = this.model.get('routeName');
-			var tripID = this.model.id;
-			var nextStation = this.model.get('nextStation');
-			var arrivalTime = this.model.get('arrivalTime');
+			var is_active = this.model.get('active');
+
+			if (is_active) {
+				var routeName = this.model.get('routeName');
+				var tripID = this.model.id;
+				var nextStation = this.model.get('nextStation');
+				var arrivalTime = this.model.get('arrivalTime');
 			
-			var $el = this.$el;
-			$el.html('<ul></ul>');
-			//this.collection.each(function(train) {
-				$el.append('<li>'+ routeName +'</li>');
-				$el.append('<li>'+ tripID +'</li>');
-				$el.append('<li>'+ nextStation +'</li>');
-				$el.append('<li>'+ arrivalTime +'</li>');
-			//});
+				var $el = this.$el;
+				$el.html('<ul></ul>');
+				//this.collection.each(function(train) {
+					$el.append('<li>'+ routeName +'</li>');
+					$el.append('<li>'+ tripID +'</li>');
+					$el.append('<li>'+ nextStation +'</li>');
+					$el.append('<li>'+ arrivalTime +'</li>');
+				//});
+			} else {
+				this.$el.remove();
+			}
 			
 			return this;
 		}
