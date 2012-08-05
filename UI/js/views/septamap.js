@@ -38,13 +38,22 @@ var SeptaSim = SeptaSim || {};
 		},
 
 		createMarker: function(coords, isOutbound) {
-			var color = (isOutbound ? 'green': 'red')
+			var color = (isOutbound ? '#00FF00': 'Red')
 			this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
 						'stroke': color,
 						'stroke-width': 1,
-						'fill': color
+						'fill': color,
+						'r': '0.005'
 					});
 
+			if(this.model.selected){
+				var ox = this.marker.attr("cx");
+				var oy = this.marker.attr("cy");
+				this.marker.attr('r','0.007');
+				this.marker.attr('stroke-width','2');
+				this.marker.attr('fill','yellow');
+			};
+			
 			var onVehicleClick = _.bind(this.onVehicleClick, this);
 			$(this.marker.node).click(onVehicleClick);
 		},
@@ -59,13 +68,22 @@ var SeptaSim = SeptaSim || {};
 		},
 
 		updateMarker: function(coords, isOutbound, displayString) {
-			var color = (isOutbound ? 'green': 'red')
+			var color = (isOutbound ? '#00FF00': 'Red')
 			this.marker.attr({
 						cx: coords.x,
 						cy: coords.y,
 						'stroke': color,
-						'fill': color
+						'fill': color,
+						'r': '0.005'
 					});
+
+			if(this.model.selected){
+				var ox = this.marker.attr("cx");
+				var oy = this.marker.attr("cy");
+				this.marker.attr('r','0.007');
+				this.marker.attr('stroke-width','2');
+				this.marker.attr('fill','yellow');
+			};
 		},
 
 		updateText: function(coords, isOutbound) {
@@ -231,7 +249,7 @@ var SeptaSim = SeptaSim || {};
 								});
 
 								paper.path(pathCoords).attr({
-									'stroke-width': 7,
+									'stroke-width': 4,
 									'stroke': route_to_color[route_id]
 								});
 							}
