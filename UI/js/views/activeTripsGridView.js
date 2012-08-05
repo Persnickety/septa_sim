@@ -72,6 +72,7 @@ var SeptaSim = SeptaSim || {};
 					this.visible = true;
 					$el.appendTo(this.options.parentView.$el).hide();
 					$el.fadeIn('slow');
+//					this.delegateEvents(this.events);
 				}
 				
 			} else {
@@ -84,7 +85,7 @@ var SeptaSim = SeptaSim || {};
 					$el.fadeOut('slow', function() { $el.remove(); });
 				}
 			}
-			
+
 			return this;
 		}
 		
