@@ -2,6 +2,9 @@ var SeptaSim = SeptaSim || {};
 
 (function(S)
 {
+	var ARRIVAL_TIME = 1;
+	var STOP_ID = 0;
+	
 	S.Train = Backbone.Model.extend({
 										idAttribute: "block_id",
 										
@@ -9,8 +12,6 @@ var SeptaSim = SeptaSim || {};
 															var schedule = this.get('schedule');
 															
 															var fromStationInfo, toStationInfo;
-															var ARRIVAL_TIME = 1;
-															var STOP_ID = 0;
 															
 															fromStationInfo = schedule[0];
 															
@@ -27,15 +28,31 @@ var SeptaSim = SeptaSim || {};
 															}
 
 															if (toStationInfo == undefined ||
-															    fromStationInfo == toStationInfo) return;
-															console.log(fromStationInfo, toStationInfo);
+															    fromStationInfo == toStationInfo) {
+
+															    this.set('active', false);
+															    return;
+													    };
+
+//															console.log(fromStationInfo, toStationInfo);
 															
 															var timeInterval = (time - fromStationInfo[ARRIVAL_TIME]) / (toStationInfo[ARRIVAL_TIME] - fromStationInfo[ARRIVAL_TIME]);
 															var fromStation = stationCollection.get(fromStationInfo[STOP_ID]);
 															var toStation = stationCollection.get(toStationInfo[STOP_ID]);
 															var newLocation = stationCollection.getInterpolatedLocation(fromStation, toStation, timeInterval);
+															var outbound = (fromStationInfo[2] == 1);
+
+															if (fromStationInfo[STOP_ID] == 90701) {
+																this.set('trenton?', true, {silent: true});
+															} else {
+																this.set('trenton?', false, {silent: true});
+															}
 															
-															this.set('location', newLocation);
+															this.set({
+																'location': newLocation,
+																'active': true,
+																'outbound?': outbound
+																});
 														}, //end of updatePosition
 
 										changeSchedule: function(stationID, incrementTimeBy) {
@@ -52,7 +69,7 @@ var SeptaSim = SeptaSim || {};
 																//if found the stop you want to update the arrival time for, then update the arrival time for all following stops
 																if(foundStop)
 																{
-																	schedule[i].arrival_time += incrementTimeBy;
+																	schedule[i][ARRIVAL_TIME] += incrementTimeBy;
 																}
 															}
 															
