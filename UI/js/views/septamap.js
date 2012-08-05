@@ -186,6 +186,8 @@ var SeptaSim = SeptaSim || {};
 									'fill': 'black'
 								});
 
+								addTip(marker.node, station.get('stop_name'));
+								
 								stationMarkers[station] = marker;
 							});
 
