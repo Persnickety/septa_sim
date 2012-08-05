@@ -88,7 +88,7 @@ var SeptaSim = SeptaSim || {};
 																}
 															}
 
-															this.updatePo
+															this.updatePosition(stationCollection, this.collection.currentTime);
 															this.set({'schedule': schedule});
 															
 														} //end of changeSchedule

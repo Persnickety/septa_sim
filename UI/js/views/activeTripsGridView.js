@@ -7,10 +7,11 @@ var SeptaSim = SeptaSim || {};
 		initialize: function() {
 			this.model.bind('change', this.onTripChange, this);
 			this.model.bind('select', this.onTripSelect, this);
+
+			this.visible = false;
 		},
 		
 		onTripChange: function() {
-				var arrivalTime = this.model.get('arrivalTime');
 			this.render()
 		},
 
@@ -43,7 +44,7 @@ var SeptaSim = SeptaSim || {};
 			var is_active = this.model.get('active');
 			
 			this.$el.empty();
-			
+
 			if (is_active) {
 				var routeName = this.model.get('routeName');
 				var tripID = this.model.id;
@@ -57,12 +58,23 @@ var SeptaSim = SeptaSim || {};
 					$el.append('<td>'+ tripID +'</td>');
 					$el.append('<td>'+ nextStation +'</td>');
 					$el.append('<td>'+ arrivalTime +'</td>');
-					$el.append('<td><button class="add-time">+</button><button class="subtract-time">&ndash;</button></td>');
+					$el.append('<td><button class="add-time">+</button></td><td><button class="subtract-time">&ndash;</button></td>');
 				//});
+
+				if (!this.visible) {
+					this.visible = true;
+					$el.appendTo(this.options.parentView.$el).hide();
+					$el.fadeIn('slow');
+				}
+				
 			} else {
 				var $el = this.$el;
-				$el.slideUp('slow', function() { $el.remove(); });
+				var self = this;
 
+				if (this.visible) {
+					self.visible = false;
+					$el.fadeOut('slow', function() { $el.remove(); });
+				}
 			}
 			
 			return this;
@@ -78,24 +90,26 @@ var SeptaSim = SeptaSim || {};
 		
 		render: function() {
 			var allTripsViews = [];
+			var self = this;
 			
-			var $el = this.$el;
 			var $table = $('<table class="table table-striped table-condensed"></table>');
 			
 			this.trainCollection.each(function(train) {
 				
 				var view = new S.ActiveTripView({
-					model: train
+					model: train,
+					parentView: self
 				});
 				
 				allTripsViews[train] = view;
 				
-				$table.append(view.$el);
+//				$table.append(view.$el);
 			});
 			
 			this.allTripsViews = allTripsViews;
 			
 			$('#train-schedule').html($table);
+			this.$el = $table;
 			
 		} //end of render
 		
