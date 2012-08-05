@@ -10,8 +10,9 @@ while ($route = mysql_fetch_array($route_q)){  //step through each route
     if($first_route) $first_route = false; else print ", ";
     print '"'.$route['route_id'].'":[';
     
-    $representative_trip_q = mysql_query('SELECT trip_id, count(*) AS n
+    $representative_trip_q = mysql_query('SELECT trip_id, count(*) AS n, trips.route_id
                                             FROM stop_times
+                                            LEFT JOIN trips USING(trip_id)
                                             GROUP BY trip_id
                                             HAVING n=( 
                                             	SELECT max(n) FROM (
@@ -21,7 +22,7 @@ while ($route = mysql_fetch_array($route_q)){  //step through each route
                                             		WHERE trips.route_id = "'.$route['route_id'].'"
                                             		GROUP BY trip_id
                                             	) AS stop_counts_by_trip
-                                            )
+                                            ) AND trips.route_id="'.$route['route_id'].'"
                                             LIMIT 1;');
     $trip = mysql_fetch_array($representative_trip_q);
     $stop_q = mysql_query('SELECT stop_id FROM stop_times WHERE trip_id="'.$trip['trip_id'].'" ORDER BY stop_sequence ASC;');
