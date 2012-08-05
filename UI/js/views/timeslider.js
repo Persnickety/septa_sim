@@ -39,8 +39,13 @@ var SeptaSim = SeptaSim || {};
 
 		onSliderChange: function(evt) {
 			var $slider = $(evt.target);
+			var $display = $('#septa-time-display');
 			this.trainCollection.currentTime = $slider.val();
 			this.trainCollection.updateAllTrainPositions(this.stationCollection);
+
+			var time = convertIntegerTimeIntoTimeObject($slider.val());
+			var displayTime = time.h + ':' + zeroFill(time.m, 2)
+			$display.html(displayTime);
 		}
 	});
 					

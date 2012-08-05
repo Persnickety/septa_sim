@@ -19,7 +19,7 @@ var SeptaSim = SeptaSim || {};
 		onTripRowClick : function() {
 			// pass the relevant row model to the parent AllTripsView
 			//this.parent.analyzeCellClick(this.model);
-		}
+		},
 		
 		tagName: 'tr',
 		

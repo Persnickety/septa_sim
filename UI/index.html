@@ -56,11 +56,22 @@
 
       <div class="row">
         <div class="span8">
-        	<div>
-	        	<input id="septa-time-slider" type="range" min="0" max="1440" value="0"" step="1"
-	        	  style="width: 100%">
-	        	<button type="button" id="septa-play-button">Play</button>
-	        </div>
+        	<div class="row controls-row">
+        	
+		      	<div class="span1">
+		      		<span id="septa-time-display">3:00</span>
+		      	</div>
+
+		      	<div class="span6">
+			      	<input id="septa-time-slider" type="range" min="0" max="1440" value="0"" step="1"
+			      	  style="width: 100%">
+			      </div>
+			      
+		      	<div class="span1">
+			      	<button type="button" id="septa-play-button">Play</button>
+			      </div>
+
+			    </div> <!-- controls-row -->
 
         	<div id="septa-canvas" style="height:900px;"></div>
         </div>
