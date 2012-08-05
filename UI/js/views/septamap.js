@@ -214,6 +214,8 @@ var SeptaSim = SeptaSim || {};
 							var toMapCoords = this.toMapCoords;
 							var paper = this.paper;
 
+							var route_to_color = {'AIR':'#91456C', 'CHE':'#94763C', 'CHW':'#00B4B2','DOY':'#775B49','ELW':'#007CC8','FOX':'#FF823D','NOR':'#EE4C69','PAO':'#20825C','CYN':'#6F549E','TRE':'#F683C9','WAR':'#F7AF42','WIL':'#8AD16B','WTR':'#5D5EBC'};
+							
 							for (route_id in stations_by_route) {
 								var pathCoords = '';
 
@@ -229,7 +231,8 @@ var SeptaSim = SeptaSim || {};
 								});
 
 								paper.path(pathCoords).attr({
-									'stroke-width': 7
+									'stroke-width': 7,
+									'stroke': route_to_color[route_id]
 								});
 							}
 						}
