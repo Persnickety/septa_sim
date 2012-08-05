@@ -6,14 +6,30 @@ var SeptaSim = SeptaSim || {};
 		
 		initialize: function() {
 			this.model.bind('change', this.onTripChange, this);
+			this.model.bind('select', this.onTripSelect, this);
 		},
 		
 		onTripChange: function() {
+				var arrivalTime = this.model.get('arrivalTime');
 			this.render()
+		},
+
+		onTripSelect: function() {
+
 		},
 		
 		events : {
 			'click' : 'onTripRowClick',
+			'click .add-time' : 'onAddTime',
+			'click .subtract-time' : 'onSubtractTime'
+		},
+
+		onAddTime: function() {
+			this.model.changeSchedule(this.model.toStation.id, 1);
+		},
+
+		onSubtractTime: function() {
+			this.model.changeSchedule(this.model.toStation.id, -1);
 		},
 
 		onTripRowClick : function() {
@@ -41,6 +57,7 @@ var SeptaSim = SeptaSim || {};
 					$el.append('<td>'+ tripID +'</td>');
 					$el.append('<td>'+ nextStation +'</td>');
 					$el.append('<td>'+ arrivalTime +'</td>');
+					$el.append('<td><button class="add-time">+</button><button class="subtract-time">&ndash;</button></td>');
 				//});
 			} else {
 				var $el = this.$el;

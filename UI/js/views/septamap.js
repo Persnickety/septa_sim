@@ -7,12 +7,19 @@ var SeptaSim = SeptaSim || {};
 		initialize: function() {
 			this.paper = this.options.paper;
 			this.mapView = this.options.mapView;
+			
 			this.model.bind('change', this.onVehicleChange, this);
+			this.model.bind('select', this.onVehicleSelect, this);
+			
 			this.marker = null;
 		},
 
 		onVehicleChange: function() {
 			this.render()
+		},
+
+		onVehicleSelect: function() {
+
 		},
 
 		createMarker: function(coords, isOutbound) {

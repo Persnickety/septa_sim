@@ -7,6 +7,11 @@ var SeptaSim = SeptaSim || {};
 	
 	S.Train = Backbone.Model.extend({
 										idAttribute: "trip_id",
+
+										select: function() {
+											this.selected = true;
+											this.trigger('select');
+										},
 										
 										updatePosition: function(stationCollection, time){
 															var schedule = this.get('schedule');
@@ -51,6 +56,9 @@ var SeptaSim = SeptaSim || {};
 															var timeInMins = toStationInfo[ARRIVAL_TIME]*1;
 															var timeObj = convertIntegerTimeIntoTimeObject(timeInMins);
 															var timeString = timeObj.h + ":" + timeObj.m + ":" + timeObj.s;
+
+															this.fromStation = fromStation;
+															this.toStation = toStation;
 															
 															this.set({
 																'location': newLocation,
@@ -68,7 +76,7 @@ var SeptaSim = SeptaSim || {};
 															var foundStop = false;
 															for(var i=0; i<schedule.length; i++)
 															{
-																if(schedule[i].stop_id == stationID)
+																if(schedule[i][STOP_ID] == stationID)
 																{
 																	foundStop = true;
 																}
@@ -79,8 +87,9 @@ var SeptaSim = SeptaSim || {};
 																	schedule[i][ARRIVAL_TIME] += incrementTimeBy;
 																}
 															}
-															
-															this.set('schedule', schedule);
+
+															this.updatePo
+															this.set({'schedule': schedule});
 															
 														} //end of changeSchedule
 
