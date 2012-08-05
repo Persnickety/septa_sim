@@ -38,9 +38,11 @@ var SeptaSim = SeptaSim || {};
 		},
 
 		createMarker: function(coords, isOutbound) {
+			var color = (isOutbound ? 'green': 'red')
 			this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
-						stroke: 'none',
-						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
+						'stroke': color,
+						'stroke-width': 1,
+						'fill': (this.model.selected ? color : 'white')
 					});
 
 			var onVehicleClick = _.bind(this.onVehicleClick, this);
@@ -57,10 +59,12 @@ var SeptaSim = SeptaSim || {};
 		},
 
 		updateMarker: function(coords, isOutbound, displayString) {
+			var color = (isOutbound ? 'green': 'red')
 			this.marker.attr({
 						cx: coords.x,
 						cy: coords.y,
-						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
+						'stroke': color,
+						'fill': (this.model.selected ? color : 'white')
 					});
 		},
 
