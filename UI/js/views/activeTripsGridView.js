@@ -12,9 +12,13 @@ var SeptaSim = SeptaSim || {};
 			this.render()
 		},
 		
+		tagName: 'tr',
+		
 		render: function() {
 			var is_active = this.model.get('active');
-
+			
+			this.$el.empty();
+			
 			if (is_active) {
 				var routeName = this.model.get('routeName');
 				var tripID = this.model.id;
@@ -22,12 +26,12 @@ var SeptaSim = SeptaSim || {};
 				var arrivalTime = this.model.get('arrivalTime');
 			
 				var $el = this.$el;
-				$el.html('<ul></ul>');
+				//$el.html('<tr></tr>');
 				//this.collection.each(function(train) {
-					$el.append('<li>'+ routeName +'</li>');
-					$el.append('<li>'+ tripID +'</li>');
-					$el.append('<li>'+ nextStation +'</li>');
-					$el.append('<li>'+ arrivalTime +'</li>');
+					$el.append('<td>'+ routeName +'</td>');
+					$el.append('<td>'+ tripID +'</td>');
+					$el.append('<td>'+ nextStation +'</td>');
+					$el.append('<td>'+ arrivalTime +'</td>');
 				//});
 			} else {
 				var $el = this.$el;
@@ -50,20 +54,22 @@ var SeptaSim = SeptaSim || {};
 			var allTripsViews = [];
 			
 			var $el = this.$el;
+			var $table = $('<table></table>');
 			
 			this.trainCollection.each(function(train) {
+				
 				var view = new S.ActiveTripView({
 					model: train
 				});
 				
 				allTripsViews[train] = view;
 				
-				$el.append(view.$el);
+				$table.append(view.$el);
 			});
 			
 			this.allTripsViews = allTripsViews;
 			
-			$('#train-schedule').html($el);
+			$('#train-schedule').html($table);
 			
 		} //end of render
 		
