@@ -100,7 +100,7 @@ var SeptaSim = SeptaSim || {};
 			var allTripsViews = [];
 			var self = this;
 			
-			var $table = $('<table class="table table-striped table-condensed"></table>');
+			var $table = $('<table class="table table-striped table-condensed"><tr><th>Route</th><th>Trip</th><th>Next Station</th><th colspan=3>Arrival Time</th></tr></table>');
 			
 			this.trainCollection.each(function(train) {
 				
