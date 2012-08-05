@@ -84,7 +84,9 @@
 
 			    </div> <!-- controls-row -->
 
-        	<div id="septa-canvas" style="height:900px;"></div>
+					<div class="septa-canvas-wrapper" style="overflow: scroll; height: 600px;">
+	        	<div id="septa-canvas" style="width: 100%; height: 900px"></div>
+	        </div>
         </div>
 
         <div class="span4">
@@ -166,6 +168,7 @@ $(function(){
 	var tip = $("#tip").hide();
 var tipText = "";
 var over = false;
+var nodeMap = {};
 
 $(document).mousemove(function(e){
     if (over){

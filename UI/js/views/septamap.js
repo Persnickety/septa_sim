@@ -25,6 +25,14 @@ var SeptaSim = SeptaSim || {};
 			this.render();
 		},
 
+		onVehicleClick: function() {
+			if (!this.model.selected) {
+				this.model.select();
+			} else {
+				this.model.deselect();
+			}
+		},
+
 		flashMarker: function() {
 
 		},
@@ -34,6 +42,9 @@ var SeptaSim = SeptaSim || {};
 						stroke: 'none',
 						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
 					});
+
+			var onVehicleClick = _.bind(this.onVehicleClick, this);
+			$(this.marker.node).click(onVehicleClick);
 		},
 
 		createText: function(coords, isOutbound, displayString) {
