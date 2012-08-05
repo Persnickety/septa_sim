@@ -15,52 +15,75 @@ var SeptaSim = SeptaSim || {};
 			this.render()
 		},
 
+		createMarker: function(coords, isOutbound) {
+			this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
+						stroke: 'none',
+						fill: (isOutbound ? 'green': 'red'),
+					});
+		},
+
+		createText: function(coords, isOutbound, displayString) {
+			this.text = this.paper.text(coords.x, coords.y, displayString).attr({
+						stroke: 'none',
+						fill: (isOutbound ? 'green': 'red'),
+						'text-size': 1
+					});
+			this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
+		},
+
+		updateMarker: function(coords, isOutbound, displayString) {
+			this.marker.attr({
+						cx: coords.x,
+						cy: coords.y,
+						fill: (isOutbound ? 'green': 'red')
+					});
+		},
+
+		updateText: function(coords, isOutbound) {
+			this.text.attr({
+						x: coords.x,
+						y: coords.y,
+						fill: (isOutbound ? 'green': 'red'),
+						transform: ''
+					});
+			this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
+		},
+
+		removeMarker: function() {
+			if (this.marker) {
+				this.marker.remove();
+				this.marker = null;
+			}
+		},
+
+		removeText: function() {
+			if (this.text) {
+				this.text.remove();
+				this.text = null;
+			}
+		},
+
 		render: function() {
 			if (this.model.get('active')) {
 				var trainLocation = this.model.get('location');
 				var coords = this.mapView.toMapCoords(trainLocation.lat, trainLocation.lon);
 				var is_outbound = this.model.get('outbound?');
-				var is_trenton = this.model.get('trenton?');
 				var block_id = this.model.get('block_id');
 
-				if (is_trenton) {
-//					console.log(block_id);
-				}
-
+				// If we don't have a marker yet...
 				if (this.marker === null) {
-					this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
-						stroke: 'none',
-						fill: (is_outbound ? 'green': 'red'),
-					});
+					this.createMarker(coords, is_outbound);
+					this.createText(coords, is_outbound, block_id);
 
-					this.text = this.paper.text(coords.x, coords.y, block_id).attr({
-						stroke: 'none',
-						fill: (is_outbound ? 'green': 'red'),
-						'text-size': 1
-					});
-
+				// If we already have a marker...
 				} else {
-					this.marker.attr({
-						cx: coords.x,
-						cy: coords.y,
-						fill: (is_outbound ? 'green': 'red')
-					});
-
-					this.text.attr({
-						x: coords.x,
-						y: coords.y,
-						fill: (is_outbound ? 'green': 'red'),
-						transform: ''
-					});
+					this.updateMarker(coords, is_outbound);
+					this.updateText(coords, is_outbound, block_id);
 				}
 
-				this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
 			} else {
-				if (this.marker) {
-					this.marker.remove();
-					this.marker = null;
-					this.text.remove();
-				}
+				this.removeMarker();
+				this.removeText();
 			}
 		}
 	});
