@@ -1,4 +1,4 @@
-<?
+<?header('Content-type: application/json');
 require_once( 'libs/lib.php');
 connectDB();
 
@@ -8,7 +8,7 @@ $first_route = true;
     
 while ($route = mysql_fetch_array($route_q)){  //step through each route
     if($first_route) $first_route = false; else print ", ";
-    print $route['route_id'].":[";
+    print '"'.$route['route_id'].'":[';
     
     $representative_trip_q = mysql_query('SELECT trip_id, count(*) AS n
                                             FROM stop_times
