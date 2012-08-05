@@ -1,6 +1,6 @@
 <?
-
 if ($_GET && array_key_exists('service_id', $_GET)){
+    header('Content-type: application/json');
     require_once( 'libs/lib.php');
     connectDB();
     send_data(mysql_real_escape_string($_GET['service_id']));
