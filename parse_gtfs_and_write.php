@@ -44,8 +44,8 @@ if(!$_POST || !array_key_exists('file', $_POST)){
 
     // $agency_id = load_data($path);
     // extra_processing($agency_id);
-    // write_station_locations();
-    write_schedule();
+    write_station_locations();
+    // write_schedule();
     // write_stations_by_route();
     print "<br />done";
     
@@ -131,7 +131,7 @@ function write_station_locations(){
     print "<hr> writing station_locations.js<br>";
     $fh = fopen("UI/data/station_locations.js", "w" );
     fwrite($fh, "STATION_LOCATIONS= ");
-    $q = "SELECT stop_id, stop_lat, stop_lon
+    $q = "SELECT stop_id, stop_lat, stop_lon, stop_name
             FROM stops
             ORDER BY stop_id ASC;";
     $stops_q = mysql_query($q);
@@ -141,7 +141,8 @@ function write_station_locations(){
         if(!$first) fwrite($fh,","); else $first=false;
         fwrite($fh, '{ "stop_id":'.$stop->stop_id.",".
                 '  "stop_lat":'.$stop->stop_lat.",".
-                '  "stop_lon":'.$stop->stop_lon."}"
+                '  "stop_lon":'.$stop->stop_lon.",".
+                '  "stop_name":"'.$stop->stop_name.'"}'
             );
     }
     fwrite($fh,"]");
