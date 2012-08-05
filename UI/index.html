@@ -56,7 +56,7 @@
 
       <div class="row">
         <div class="span8">
-        	<div id="septa-canvas"></div>
+        	<div id="septa-canvas" style="height:900px;"></div>
         </div>
 
         <div class="span4">
@@ -98,20 +98,13 @@
 <script src="js/views/schedulelist.js"></script>
 <script src="js/views/septamap.js"></script>
 
+<script src="data/json_schedule_info.js"></script>
+<script src="data/station_locations.js"></script>
+<script src="data/stations_by_route.js"></script>
+
 <script>
 $(function(){
-		var trainCollection = new SeptaSim.TrainCollection([
-			{
-				block_id: 123,
-				schedule: [
-					[1, 300, 0],
-					[2, 400, 0],
-					[3, 500, 0],
-					[4, 600, 0],
-					[5, 700, 0],
-				]
-			}
-		]);
+		var trainCollection = new SeptaSim.TrainCollection(SCHEDULE_INFO_BLOB);
 //		
 //		var allSchedulesView = new SeptaSim.AllSchedulesView({
 //									collection: trainCollection
@@ -119,25 +112,9 @@ $(function(){
 		
 //		allSchedulesView.render();
 
-		var stationCollection = new SeptaSim.StationCollection([
-			{
-				stop_id: 1,
-				stop_lat: 100,
-				stop_lon: 200
-			},
-			{
-				stop_id: 2,
-				stop_lat: 200,
-				stop_lon: 300
-			},
-			{
-				stop_id: 3,
-				stop_lat: 200,
-				stop_lon: 400
-			}
-		]);
+		var stationCollection = new SeptaSim.StationCollection(STATION_LOCATIONS_BLOB);
 
-		var septaMapView = new SeptaSim.SeptaMapView({
+		septaMapView = new SeptaSim.SeptaMapView({
 			trainCollection: trainCollection,
 			stationCollection: stationCollection
 		});
