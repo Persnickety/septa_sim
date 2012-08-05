@@ -87,6 +87,21 @@ var SeptaSim = SeptaSim || {};
 					this.updateMarker(coords, is_outbound);
 					this.updateText(coords, is_outbound, block_id);
 				}
+				
+				var outbound = this.model.get('outbound');
+				var routeName = this.model.get('routeName');
+				var nextStation = this.model.get('nextStation');
+				var arrivalTime = this.model.get('arrivalTime');
+				
+				var $tooltip = 'Route: ' + routeName + '\n' + 'Next Station: ' + nextStation + '\n' + 'Arrival Time: ' + arrivalTime;
+				if(outbound){
+					$tooltip += '\nOutbound Train';
+				}
+				else {
+					$tooltip += '\nInbound Train';
+				}
+				
+				addTip(this.marker.node, $tooltip);
 
 			} else {
 				this.removeMarker();

@@ -14,6 +14,17 @@
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
+	  
+	  #tip{
+		 position : absolute;
+		 border : 1px solid gray;
+		 background-color : #efefef;
+		 padding : 3px;
+		 z-index: 1000;
+		 /* set this to create word wrap */
+		 max-width: 200px;
+		 white-space:pre;
+		}​
     </style>
     <link href="libs/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -84,6 +95,8 @@
 		  </div>
         </div>
       </div>
+	  
+	  <div id="tip"></div>​
 
     </div> <!-- /container -->
 
@@ -149,6 +162,30 @@ $(function(){
 		septaMapView.render();
 		allTripsView.render();
 	});
+
+	var tip = $("#tip").hide();
+var tipText = "";
+var over = false;
+
+$(document).mousemove(function(e){
+    if (over){
+      tip.css("left", e.clientX+20).css("top", e.clientY+20);
+      tip.text(tipText);
+    }
+});
+
+function addTip(node, txt){
+    $(node).mouseenter(function(){
+       tipText = txt;
+       tip.fadeIn();
+       over = true;
+    }).mouseleave(function(){
+       tip.fadeOut(200);
+       over = false;
+    });
+}
+
+
 </script>
 
   </body>
