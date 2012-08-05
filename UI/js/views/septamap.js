@@ -7,35 +7,64 @@ var SeptaSim = SeptaSim || {};
 		initialize: function() {
 			this.paper = this.options.paper;
 			this.mapView = this.options.mapView;
+			
 			this.model.bind('change', this.onVehicleChange, this);
+			this.model.bind('select', this.onVehicleSelect, this);
+			
 			this.marker = null;
 		},
 
 		onVehicleChange: function() {
-			this.render()
+			this.render();
+		},
+
+		onVehicleSelect: function() {
+			if (this.model.selected) {
+				this.flashMarker();
+			}
+			this.render();
+		},
+
+		onVehicleClick: function() {
+			if (!this.model.selected) {
+				this.model.select();
+			} else {
+				this.model.deselect();
+			}
+		},
+
+		flashMarker: function() {
+
 		},
 
 		createMarker: function(coords, isOutbound) {
+			var color = (isOutbound ? 'green': 'red')
 			this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
-						stroke: 'none',
-						fill: (isOutbound ? 'green': 'red'),
+						'stroke': color,
+						'stroke-width': 1,
+						'fill': color
 					});
+
+			var onVehicleClick = _.bind(this.onVehicleClick, this);
+			$(this.marker.node).click(onVehicleClick);
 		},
 
 		createText: function(coords, isOutbound, displayString) {
 			this.text = this.paper.text(coords.x, coords.y, displayString).attr({
 						stroke: 'none',
-						fill: (isOutbound ? 'green': 'red'),
-						'text-size': 1
+						'text-size': 1,
+						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
 					});
 			this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
 		},
 
 		updateMarker: function(coords, isOutbound, displayString) {
+			var color = (isOutbound ? 'green': 'red')
 			this.marker.attr({
 						cx: coords.x,
 						cy: coords.y,
-						fill: (isOutbound ? 'green': 'red')
+						'stroke': color,
+						'fill': color
 					});
 		},
 
@@ -43,8 +72,8 @@ var SeptaSim = SeptaSim || {};
 			this.text.attr({
 						x: coords.x,
 						y: coords.y,
-						fill: (isOutbound ? 'green': 'red'),
-						transform: ''
+						transform: '',
+						fill: (this.model.selected ? 'yellow' : (isOutbound ? 'green': 'red'))
 					});
 			this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
 		},
@@ -73,17 +102,32 @@ var SeptaSim = SeptaSim || {};
 				// If we don't have a marker yet...
 				if (this.marker === null) {
 					this.createMarker(coords, is_outbound);
-					this.createText(coords, is_outbound, block_id);
+//					this.createText(coords, is_outbound, block_id);
 
 				// If we already have a marker...
 				} else {
 					this.updateMarker(coords, is_outbound);
-					this.updateText(coords, is_outbound, block_id);
+//					this.updateText(coords, is_outbound, block_id);
 				}
+				
+				var outbound = this.model.get('outbound');
+				var routeName = this.model.get('routeName');
+				var nextStation = this.model.get('nextStation');
+				var arrivalTime = this.model.get('arrivalTime');
+				
+				var $tooltip = 'Route: ' + routeName + '\n' + 'Next Station: ' + nextStation + '\n' + 'Arrival Time: ' + arrivalTime;
+				if(outbound){
+					$tooltip += '\nOutbound Train';
+				}
+				else {
+					$tooltip += '\nInbound Train';
+				}
+				
+				addTip(this.marker.node, $tooltip);
 
 			} else {
 				this.removeMarker();
-				this.removeText();
+//				this.removeText();
 			}
 		}
 	});
@@ -135,18 +179,22 @@ var SeptaSim = SeptaSim || {};
 							var lons = this.stationCollection.pluck('stop_lon');
 							this.setViewBox(_.min(lats), _.min(lons), _.max(lats), _.max(lons));
 
+							this.drawRoutes(STATIONS);
+
 							this.stationCollection.each(function(station) {
 								var coords = toMapCoords(station.get('stop_lat'), station.get('stop_lon'))
-								var marker = paper.circle(coords.x, coords.y, 0.002).attr({
-									'stroke': 'none',
-									'fill': 'black'
+								var marker = paper.circle(coords.x, coords.y, 0.004).attr({
+									'stroke': 'black',
+									'stroke-width': 1,
+									'fill': 'white'
 								});
 
+								addTip(marker.node, station.get('stop_name'));
+								
 								stationMarkers[station] = marker;
 							});
 
 							this.stationMarkers = stationMarkers;
-							this.drawRoutes(STATIONS);
 
 							var vehicleMarkerViews = [];
 							var self = this;
@@ -166,6 +214,8 @@ var SeptaSim = SeptaSim || {};
 							var toMapCoords = this.toMapCoords;
 							var paper = this.paper;
 
+							var route_to_color = {'AIR':'#91456C', 'CHE':'#94763C', 'CHW':'#00B4B2','DOY':'#775B49','ELW':'#007CC8','FOX':'#FF823D','NOR':'#EE4C69','PAO':'#20825C','CYN':'#6F549E','TRE':'#F683C9','WAR':'#F7AF42','WIL':'#8AD16B','WTR':'#5D5EBC'};
+							
 							for (route_id in stations_by_route) {
 								var pathCoords = '';
 
@@ -181,7 +231,8 @@ var SeptaSim = SeptaSim || {};
 								});
 
 								paper.path(pathCoords).attr({
-									'stroke-width': 0.2
+									'stroke-width': 7,
+									'stroke': route_to_color[route_id]
 								});
 							}
 						}
