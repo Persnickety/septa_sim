@@ -48,10 +48,17 @@ var SeptaSim = SeptaSim || {};
 																this.set('trenton?', false, {silent: true});
 															}
 															
+															var timeInSeconds = (toStationInfo[ARRIVAL_TIME]*1 / 60)*1 + 3;
+															var timeObj = secondsToTime(timeInSeconds);
+															var timeString = timeObj.h + ":" + timeObj.m + ":" + timeObj.s;
+															
 															this.set({
 																'location': newLocation,
 																'active': true,
-																'outbound?': outbound
+																'outbound?': outbound,
+																'routeName': this.id.substring(3),
+																'nextStation': toStation.get('stop_name'),
+																'arrivalTime': timeString
 																});
 														}, //end of updatePosition
 
