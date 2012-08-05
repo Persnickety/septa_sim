@@ -65,8 +65,9 @@ function getInterpolatedLocation(fromLat, fromLon, toLat, toLon, timeInterval)
  * @param integer secs Number of seconds to convert
  * @return object
  */
-function secondsToTime(secs)
+function convertIntegerTimeIntoTimeObject(time)
 {
+	var secs = (time*1/60 + 3)*60*60
 	var hours = Math.floor(secs / (60 * 60));
 	
 	var divisor_for_minutes = secs % (60 * 60);
