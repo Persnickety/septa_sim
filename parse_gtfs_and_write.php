@@ -33,7 +33,7 @@ if(!$_POST || !array_key_exists('file', $_POST)){
         'stop_times' => array(
             "filename"   => "stop_times.txt",
             "req_fields" => array('trip_id', 'arrival_time', 'departure_time', 'stop_id', 'stop_sequence', 'agency_id'),
-            "opt_fields" => array()            
+            "opt_fields" => array('pickup_type', 'drop_off_type')            
         ),
         'calendar' => array(
             "filename"  => "calendar.txt",
@@ -73,6 +73,7 @@ function load_data($path){
 }
 
 function apply_file($file_name, $req_fields, $opt_fields, $table, $agency_id){
+    // print "$file_name <br />";
     if(!file_exists($file_name)){
         print "not found: $file_name";
         exit;
@@ -103,7 +104,6 @@ function apply_file($file_name, $req_fields, $opt_fields, $table, $agency_id){
             if (mysql_errno() == 1062) print ".";
             else print mysql_errno().":".mysql_error()." $q<br />\n"; 
         }
-        // print "$q <br />\n";
     }
     
     fclose($file);
@@ -121,7 +121,7 @@ function extra_processing($agency_id){
     mysql_query($q);    //stops can now always be joined using the (optional) block
     
     /*********
-        mistake in GTFS file for June 2012 - missing stop_time for block_id 1071
+        mistake in SEPTA GTFS file for June 2012 - missing stop_time for block_id 1071
     ********/
     mysql_query("INSERT INTO stop_times (agency_id, trip_id, block_id, stop_sequence, stop_id, arrival_time, departure_time) 
                     VALUES ('SEPTA', 'CYN_1071_V5', '1071', 1, '90005', '12:19:00', '12:19:00' )");
