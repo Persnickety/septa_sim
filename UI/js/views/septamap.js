@@ -2,6 +2,29 @@ var SeptaSim = SeptaSim || {};
 
 (function(S, $)
 {
+	S.TimeSliderView = Backbone.View.extend({
+		initialize: function() {
+			var $slider = $('#septa-time-slider');
+			this.trainCollection = this.options.trainCollection;
+			this.stationCollection = this.options.stationCollection;
+			$slider.change(_.bind(this.onSliderChange, this));
+
+			var play = function() {
+				$slider.val($slider.val()*1 + 1).change();
+				_.delay(play, 100);
+			}
+
+			play();
+		},
+
+		onSliderChange: function(evt) {
+			var $slider = $(evt.target);
+			this.trainCollection.currentTime = $slider.val();
+			this.trainCollection.updateAllTrainPositions(this.stationCollection);
+		}
+	});
+
+
 	S.VehicleMarkerView = Backbone.View.extend({
 		initialize: function() {
 			this.paper = this.options.paper;
@@ -15,16 +38,35 @@ var SeptaSim = SeptaSim || {};
 		},
 
 		render: function() {
-			var trainLocation = this.model.get('location');
-			var coords = this.mapView.toMapCoords(trainLocation.lat, trainLocation.lon);
+			if (this.model.get('active')) {
+				var trainLocation = this.model.get('location');
+				var coords = this.mapView.toMapCoords(trainLocation.lat, trainLocation.lon);
+				var is_outbound = this.model.get('outbound?');
+				var is_trenton = this.model.get('trenton?');
+				var block_id = this.model.get('block_id');
 
-			if (this.marker === null) {
-				this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
-					stroke: 'none',
-					fill: 'red'
-				});
+				if (is_trenton) {
+//					console.log(block_id);
+				}
+
+				if (this.marker === null) {
+					this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
+//					this.marker = this.paper.text(coords.x, coords.y, block_id).attr({
+						stroke: 'none',
+						fill: (is_outbound ? 'greed': 'red')
+					});
+				} else {
+					this.marker.attr({
+						cx: coords.x,
+						cy: coords.y,
+						fill: (is_outbound ? 'greed': 'red')
+					});
+				}
 			} else {
-				this.marker.attr({cx: coords.x, cy: coords.y});
+				if (this.marker) {
+					this.marker.remove();
+					this.marker = null;
+				}
 			}
 		}
 	});
