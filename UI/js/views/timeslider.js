@@ -12,16 +12,22 @@ var SeptaSim = SeptaSim || {};
 			this.stationCollection = this.options.stationCollection;
 
 			$slider.change(_.bind(this.onSliderChange, this));
-			$play.click(_.bind(this.startSimulation, this));
-			$pause.click(_.bind(this.pauseSimulation, this));
+			$play.click(_.bind(this.toggleSimulation, this));
 
-			this.startSimulation();
+			this.toggleSimulation();
 		},
 
-		startSimulation: function() {
+		toggleSimulation: function() {
+			var $play = $('#septa-play-button');
+
 			if (!this.isStarted) {
-				this.isStarted = true
+				this.isStarted = true;
 				this.continueSimulation();
+				$play.html('Pause');
+			} else {
+				clearTimeout(this.simContinuationId);
+				this.isStarted = false;
+				$play.html('Play');
 			}
 		},
 
@@ -29,13 +35,6 @@ var SeptaSim = SeptaSim || {};
 			var $slider = $('#septa-time-slider');
 			$slider.val($slider.val()*1 + 1).change();
 			this.simContinuationId = _.delay(_.bind(this.continueSimulation, this), 100);
-		},
-
-		pauseSimulation: function() {
-			if (this.isStarted) {
-				clearTimeout(this.simContinuationId);
-				this.isStarted = false;
-			}
 		},
 
 		onSliderChange: function(evt) {

@@ -29,21 +29,37 @@ var SeptaSim = SeptaSim || {};
 
 				if (this.marker === null) {
 					this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
-//					this.marker = this.paper.text(coords.x, coords.y, block_id).attr({
 						stroke: 'none',
-						fill: (is_outbound ? 'greed': 'red')
+						fill: (is_outbound ? 'green': 'red'),
 					});
+
+					this.text = this.paper.text(coords.x, coords.y, block_id).attr({
+						stroke: 'none',
+						fill: (is_outbound ? 'green': 'red'),
+						'text-size': 1
+					});
+
 				} else {
 					this.marker.attr({
 						cx: coords.x,
 						cy: coords.y,
-						fill: (is_outbound ? 'greed': 'red')
+						fill: (is_outbound ? 'green': 'red')
+					});
+
+					this.text.attr({
+						x: coords.x,
+						y: coords.y,
+						fill: (is_outbound ? 'green': 'red'),
+						transform: ''
 					});
 				}
+
+				this.text.transform('s0.002,0.002,' + coords.x + ',' + coords.y + 't15,0');
 			} else {
 				if (this.marker) {
 					this.marker.remove();
 					this.marker = null;
+					this.text.remove();
 				}
 			}
 		}
