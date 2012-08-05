@@ -58,3 +58,27 @@ function getInterpolatedLocation(fromLat, fromLon, toLat, toLon, timeInterval)
 	var lon2 = (toLon - fromLon) * timeInterval + fromLon;
 	return { lat: lat2, lon: lon2 };
 }
+
+/**
+ * Convert number of seconds into time object
+ *
+ * @param integer secs Number of seconds to convert
+ * @return object
+ */
+function secondsToTime(secs)
+{
+	var hours = Math.floor(secs / (60 * 60));
+	
+	var divisor_for_minutes = secs % (60 * 60);
+	var minutes = Math.floor(divisor_for_minutes / 60);
+
+	var divisor_for_seconds = divisor_for_minutes % 60;
+	var seconds = Math.ceil(divisor_for_seconds);
+	
+	var obj = {
+		"h": hours,
+		"m": minutes,
+		"s": seconds
+	};
+	return obj;
+}

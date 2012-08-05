@@ -66,9 +66,9 @@
 
         <div class="span4">
           <div class="well">
-			<ol class="train-schedule">
+			<div id="train-schedule">
 				
-			</ol>
+			</div>
 		  </div>
         </div>
       </div>
@@ -102,6 +102,7 @@
 <script src="js/models/util.js"></script>
 <script src="js/views/schedulelist.js"></script>
 <script src="js/views/septamap.js"></script>
+<script src="js/views/activeTripsGridView.js"></script>
 
 <script src="data/schedule_S1.js"></script>
 <script src="data/station_locations.js"></script>
@@ -126,8 +127,14 @@ $(function(){
 		timeSliderView = new SeptaSim.TimeSliderView({
 			trainCollection: trainCollection,
 			stationCollection: stationCollection
-		})
+		});
+		
+		allTripsView = new SeptaSim.AllTripsView({
+			trainCollection: trainCollection
+		});
+		
 		septaMapView.render();
+		allTripsView.render();
 	});
 </script>
 
