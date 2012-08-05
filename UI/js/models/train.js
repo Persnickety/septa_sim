@@ -60,7 +60,7 @@ var SeptaSim = SeptaSim || {};
 															
 															var timeInMins = toStationInfo[ARRIVAL_TIME]*1;
 															var timeObj = convertIntegerTimeIntoTimeObject(timeInMins);
-															var timeString = timeObj.h + ":" + timeObj.m + ":" + timeObj.s;
+															var timeString = timeObj.h + ":" + zeroFill(timeObj.m, 2);
 
 															this.fromStation = fromStation;
 															this.toStation = toStation;
