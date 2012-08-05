@@ -42,11 +42,11 @@ if(!$_POST || !array_key_exists('file', $_POST)){
         )
     );
 
-    // $agency_id = load_data($path);
-    // extra_processing($agency_id);
+    $agency_id = load_data($path);
+    extra_processing($agency_id);
     write_station_locations();
-    // write_schedule();
-    // write_stations_by_route();
+    write_schedule();
+    write_stations_by_route();
     print "<br />done";
     
 }
@@ -172,7 +172,7 @@ function write_schedule(){
         
             $q = "SELECT stop_times.trip_id, stop_id, FLOOR((TIME_TO_SEC(  LEFT( departure_time,6)   )-10800)/60) AS mins_since_3am
                     FROM stop_times
-                    LEFT JOIN trips USING (block_id)
+                    LEFT JOIN trips USING (trip_id)
                     WHERE trips.block_id='$b_id' AND trips.service_id='$service_id'
                     ORDER BY stop_times.trip_id, stop_sequence ASC";
 
