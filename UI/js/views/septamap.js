@@ -252,6 +252,8 @@ var SeptaSim = SeptaSim || {};
 									'stroke-width': 4,
 									'stroke': route_to_color[route_id]
 								});
+								
+								
 							}
 						}
 					});
