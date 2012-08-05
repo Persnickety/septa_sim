@@ -54,7 +54,7 @@ var SeptaSim = SeptaSim || {};
 			var allTripsViews = [];
 			
 			var $el = this.$el;
-			var $table = $('<table></table>');
+			var $table = $('<table class="table table-striped table-condensed"></table>');
 			
 			this.trainCollection.each(function(train) {
 				
