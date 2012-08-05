@@ -31,11 +31,14 @@ function send_data($service_id){
                             GROUP BY block_id
                             ORDER BY block_id ASC;"
                 );
+    $n = 0;
     while ($trip = mysql_fetch_object($trips_q)){
-        $b_id = $trip->block_id;
-        $out[$b_id] = array();
-            
-        $q = "SELECT stop_id, TIME_TO_SEC(departure_time)-10800 AS secs_since_3am
+        $b_id = 1*$trip->block_id;
+        $out[$n] = array();
+        $out[$n]['block_id'] = $b_id;
+        $out[$n]['schedule'] = array();
+        
+        $q = "SELECT stop_id, FLOOR((TIME_TO_SEC(  LEFT( departure_time,6)   )-10800)/60) AS mins_since_3am
                 FROM stop_times
                 LEFT JOIN trips USING (block_id)
                 WHERE trips.block_id='$b_id' AND trips.service_id='$service_id'
@@ -47,11 +50,12 @@ function send_data($service_id){
         while ($stop = mysql_fetch_object($stop_time_q)){
             if($stop->stop_id == $last_stop_id) continue; //duplicates may exist at the overlap when changing trips within a block
             $has_reached_suburban = $has_reached_suburban || ($stop->stop_id == '90005');            
-            $out[$b_id][]= array($stop->stop_id, $stop->secs_since_3am, $has_reached_suburban?1:0);
+            $out[$n]['schedule'][]= array($stop->stop_id, 1*$stop->mins_since_3am, $has_reached_suburban?1:0);
             $last_stop_id = $stop->stop_id;
         } //loop every stop
         // if(!$has_reached_suburban) print "<span style='color:red'>$b_id</span> $q <br>".json_encode($out[$b_id])."<br>\n";
         // else print "$b_id ok<br>\n";
+        $n++;
     } //loop every trip    
     print json_encode($out);
 }
