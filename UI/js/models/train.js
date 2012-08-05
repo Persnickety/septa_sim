@@ -56,7 +56,7 @@ var SeptaSim = SeptaSim || {};
 																'location': newLocation,
 																'active': true,
 																'outbound?': outbound,
-																'routeName': this.id.substring(3),
+																'routeName': this.id.substring(0,3),
 																'nextStation': toStation.get('stop_name'),
 																'arrivalTime': timeString
 																});
