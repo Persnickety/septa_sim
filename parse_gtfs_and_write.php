@@ -42,11 +42,11 @@ if(!$_POST || !array_key_exists('file', $_POST)){
         )
     );
 
-    $agency_id = load_data($path);
-    extra_processing($agency_id);
-    write_station_locations();
+    // $agency_id = load_data($path);
+    // extra_processing($agency_id);
+    // write_station_locations();
     write_schedule();
-    write_stations_by_route();
+    // write_stations_by_route();
     print "<br />done";
     
 }
@@ -165,23 +165,31 @@ function write_schedule(){
                                 GROUP BY block_id
                                 ORDER BY block_id ASC;"
                     );
-        $n = 0;
+        $n = -1;
         while ($trip = mysql_fetch_object($trips_q)){
             $b_id = 1*$trip->block_id;
-            $out[$n] = array();
-            $out[$n]['block_id'] = $b_id;
-            $out[$n]['schedule'] = array();
         
-            $q = "SELECT stop_id, FLOOR((TIME_TO_SEC(  LEFT( departure_time,6)   )-10800)/60) AS mins_since_3am
+            $q = "SELECT stop_times.trip_id, stop_id, FLOOR((TIME_TO_SEC(  LEFT( departure_time,6)   )-10800)/60) AS mins_since_3am
                     FROM stop_times
                     LEFT JOIN trips USING (block_id)
                     WHERE trips.block_id='$b_id' AND trips.service_id='$service_id'
-                    ORDER BY stop_sequence ASC";
+                    ORDER BY stop_times.trip_id, stop_sequence ASC";
 
             $stop_time_q = mysql_query($q);
             $has_reached_suburban = false;
-            $last_stop_id=null;
+            $last_stop_id = null;
+            $last_trip_id = null;
             while ($stop = mysql_fetch_object($stop_time_q)){
+                if( $last_trip_id != $stop->trip_id){ //new object, reset our flags
+                    $has_reached_suburban = false;
+                    $last_stop_id = null;
+                    $n++;           
+                    $out[$n] = array();                             
+                    $out[$n]['block_id'] = $b_id;
+                    $out[$n]['trip_id'] = $stop->trip_id;
+                    $out[$n]['schedule'] = array();    
+                    $last_trip_id = $stop->trip_id;                
+                }
                 if($stop->stop_id == $last_stop_id) continue; //duplicates may exist at the overlap when changing trips within a block
                 $has_reached_suburban = $has_reached_suburban || ($stop->stop_id == '90005');            
                 $out[$n]['schedule'][]= array($stop->stop_id, 1*$stop->mins_since_3am, $has_reached_suburban?1:0);
@@ -189,7 +197,6 @@ function write_schedule(){
             } //loop every stop
             // if(!$has_reached_suburban) print "<span style='color:red'>$b_id</span> $q <br>".json_encode($out[$b_id])."<br>\n";
             // else print "$b_id ok<br>\n";
-            $n++;
         } //loop every trip    
         fwrite($fh, json_encode($out));    
         fclose($fh);    
