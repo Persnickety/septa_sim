@@ -42,7 +42,7 @@ var SeptaSim = SeptaSim || {};
 			this.marker = this.paper.circle(coords.x, coords.y, 0.005).attr({
 						'stroke': color,
 						'stroke-width': 1,
-						'fill': (this.model.selected ? color : 'white')
+						'fill': color
 					});
 
 			var onVehicleClick = _.bind(this.onVehicleClick, this);
@@ -64,7 +64,7 @@ var SeptaSim = SeptaSim || {};
 						cx: coords.x,
 						cy: coords.y,
 						'stroke': color,
-						'fill': (this.model.selected ? color : 'white')
+						'fill': color
 					});
 		},
 
@@ -179,11 +179,14 @@ var SeptaSim = SeptaSim || {};
 							var lons = this.stationCollection.pluck('stop_lon');
 							this.setViewBox(_.min(lats), _.min(lons), _.max(lats), _.max(lons));
 
+							this.drawRoutes(STATIONS);
+
 							this.stationCollection.each(function(station) {
 								var coords = toMapCoords(station.get('stop_lat'), station.get('stop_lon'))
-								var marker = paper.circle(coords.x, coords.y, 0.002).attr({
-									'stroke': 'none',
-									'fill': 'black'
+								var marker = paper.circle(coords.x, coords.y, 0.004).attr({
+									'stroke': 'black',
+									'stroke-width': 1,
+									'fill': 'white'
 								});
 
 								addTip(marker.node, station.get('stop_name'));
@@ -192,7 +195,6 @@ var SeptaSim = SeptaSim || {};
 							});
 
 							this.stationMarkers = stationMarkers;
-							this.drawRoutes(STATIONS);
 
 							var vehicleMarkerViews = [];
 							var self = this;
@@ -227,7 +229,7 @@ var SeptaSim = SeptaSim || {};
 								});
 
 								paper.path(pathCoords).attr({
-									'stroke-width': 0.2
+									'stroke-width': 7
 								});
 							}
 						}
