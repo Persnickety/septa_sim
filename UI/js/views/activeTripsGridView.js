@@ -30,7 +30,9 @@ var SeptaSim = SeptaSim || {};
 					$el.append('<li>'+ arrivalTime +'</li>');
 				//});
 			} else {
-				this.$el.remove();
+				var $el = this.$el;
+				$el.slideUp('slow', function() { $el.remove(); });
+
 			}
 			
 			return this;
