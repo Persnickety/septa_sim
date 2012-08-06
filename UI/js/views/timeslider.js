@@ -21,20 +21,24 @@ var SeptaSim = SeptaSim || {};
 			var $play = $('#septa-play-button');
 
 			if (!this.isStarted) {
-				this.isStarted = true;
 				this.continueSimulation();
 				$play.html('Pause');
 			} else {
-				clearTimeout(this.simContinuationId);
-				this.isStarted = false;
+				this.pauseSimulation();
 				$play.html('Play');
 			}
 		},
 
 		continueSimulation: function() {
+			this.isStarted = true;
 			var $slider = $('#septa-time-slider');
-			$slider.val($slider.val()*1 + 1).change();
-			this.simContinuationId = _.delay(_.bind(this.continueSimulation, this), 100);
+			$slider.val(parseInt($slider.val()) + 1).change();
+			this.simContinuationId = _.delay(_.bind(this.continueSimulation, this), 300);
+		},
+
+		pauseSimulation: function() {
+			this.isStarted = false;
+			clearTimeout(this.simContinuationId);
 		},
 
 		onSliderChange: function(evt) {
