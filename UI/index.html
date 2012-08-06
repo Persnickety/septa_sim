@@ -180,8 +180,8 @@ $(function(){
 
         hstr = $("#septa-canvas").css("height");
         initialCanvasHeight = 1* hstr.substring(0,hstr.length-2);
-		$("#zoom-in").click(onZoomin);
-		$("#zoom-out").click(onZoomout);
+		$("#zoom-in").click(zoomin);
+		$("#zoom-out").click(zoomout);
 		
         $("#container").width("98%");
         $(window).resize(resizeCanvas);        
@@ -217,12 +217,12 @@ function addTip(node, txt){
 
 
 var initialCanvasHeight;
-function onZoomin(){
+function zoomin(){
     oldScale =  septaMapView.paper.height/initialCanvasHeight
     newScale = oldScale * 1.1;
     septaMapView.paper.scaleAll(newScale);
 }
-function onZoomout(){
+function zoomout(){
     oldScale =  septaMapView.paper.height/initialCanvasHeight
     newScale = oldScale / 1.1;
     septaMapView.paper.scaleAll(newScale);
@@ -232,11 +232,21 @@ function resizeCanvas(){
     $("#canvas-wrapper").height($(window).height() - 150);
 }
 
-function keyUp(k){
-    if(k.charCode == 32) {
+function keyUp(event){
+    var k = event.keyCode;
+    var c = event.charCode;
+    
+    if(c == 32) { //space
         timeSliderView.toggleSimulation();
         return false;
+    } else if(c == 61 || c == 43){ // + or =
+        zoomin();
+        return false
+    } else if(c == 45 || c==95) { // - or _
+        zoomout();
+        return false;
     }
+//    console.log("key="+k+"  char="+c);
     return true;
 }
 
