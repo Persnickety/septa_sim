@@ -69,6 +69,8 @@
         	<div class="row controls-row">
 
 		      	<div class="span1">
+		      		<input type="button" id="zoom-in" value="+" />
+		      		<input type="button" id="zoom-out" value="-" />
 		      		<span id="septa-time-display">3:00</span>
 		      	</div>
 
@@ -84,7 +86,7 @@
 			    </div> <!-- controls-row -->
 
 					<div class="septa-canvas-wrapper well" style="overflow: scroll; height: 1000px;">
-	        	<div id="septa-canvas" style="width: 100%; height: 900px"></div>
+	        	<div id="septa-canvas" style="width: 100%; height:900px"></div>
 	        </div>
         </div>
 
@@ -136,6 +138,7 @@
 <script src="libs/underscore.js"></script>
 <script src="libs/backbone.js"></script>
 <script src="libs/raphael.js"></script>
+<script src="libs/scale.raphael.js"></script>
 
 <script src="js/models/station.js"></script>
 <script src="js/models/train.js"></script>
@@ -174,6 +177,13 @@ $(function(){
 			trainCollection: trainCollection
 		});
 
+
+        hstr = $("#septa-canvas").css("height");
+        initialCanvasHeight = 1* hstr.substring(0,hstr.length-2);
+		$("#zoom-in").click(onZoomin);
+		$("#zoom-out").click(onZoomout);
+
+
 		septaMapView.render();
 		allTripsView.render();
 	});
@@ -199,6 +209,19 @@ function addTip(node, txt){
        tip.fadeOut(200);
        over = false;
     });
+}
+
+
+var initialCanvasHeight;
+function onZoomin(){
+    oldScale =  septaMapView.paper.height/initialCanvasHeight
+    newScale = oldScale * 1.1;
+    septaMapView.paper.scaleAll(newScale);
+}
+function onZoomout(){
+    oldScale =  septaMapView.paper.height/initialCanvasHeight
+    newScale = oldScale / 1.1;
+    septaMapView.paper.scaleAll(newScale);
 }
 
 
