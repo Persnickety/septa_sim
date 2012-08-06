@@ -156,7 +156,7 @@ var SeptaSim = SeptaSim || {};
 							var w = $('#septa-canvas').width();
 							var h = $('#septa-canvas').height();
 
-							this.paper = Raphael('septa-canvas', w, h);
+							this.paper = ScaleRaphael('septa-canvas', w, h);
 							this.width = w;
 							this.height = h;
 
