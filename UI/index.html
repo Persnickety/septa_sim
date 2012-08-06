@@ -186,6 +186,7 @@ $(function(){
         $("#container").width("98%");
         $(window).resize(resizeCanvas);        
         resizeCanvas();
+        $(document).keypress(keyUp);
 
 		septaMapView.render();
 		allTripsView.render();
@@ -229,6 +230,15 @@ function onZoomout(){
 function resizeCanvas(){
     $(".span8").width($("#container").width()-430)
 }
+
+function keyUp(k){
+    if(k.charCode == 32) {
+        timeSliderView.toggleSimulation();
+        return false;
+    }
+    return true;
+}
+
 
 </script>
 
