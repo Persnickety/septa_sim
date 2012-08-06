@@ -48,8 +48,6 @@ var SeptaSim = SeptaSim || {};
 		render: function() {
 			var is_active = this.model.get('active');
 			
-			this.$el.empty();
-
 			if (is_active) {
 				var routeName = this.model.get('routeName');
 				var tripID = this.model.id;
@@ -57,11 +55,12 @@ var SeptaSim = SeptaSim || {};
 				var arrivalTime = this.model.get('arrivalTime');
 			
 				var $el = this.$el;
-				$el.append('<td>'+ routeName +'</td>');
-				$el.append('<td>'+ tripID +'</td>');
-				$el.append('<td>'+ nextStation +'</td>');
-				$el.append('<td>'+ arrivalTime +'</td>');
-				$el.append('<td><button class="add-time">+</button></td><td><button class="subtract-time">&ndash;</button></td>');
+				$el.empty();
+				$el.append('<td><div>'+ routeName +'</div></td>');
+				$el.append('<td><div>'+ tripID +'</div></td>');
+				$el.append('<td><div>'+ nextStation +'</div></td>');
+				$el.append('<td><div>'+ arrivalTime +'</div></td>');
+				$el.append('<td><div><button class="add-time">+</button></div></td><td><div><button class="subtract-time">&ndash;</button></div></td>');
 
 				if (this.model.selected) {
 					$el.find('td').css({'background-color': 'yellow'});
@@ -70,8 +69,8 @@ var SeptaSim = SeptaSim || {};
 				// Show the element if it's active but not visible.
 				if (!this.visible) {
 					this.visible = true;
-					$el.appendTo(this.options.parentView.$el).hide();
-					$el.fadeIn('slow');
+					$el.appendTo(this.options.parentView.$el);
+					$el.find('td > div').hide().slideDown();
 					this.delegateEvents(this.events);
 				}
 				
@@ -81,8 +80,9 @@ var SeptaSim = SeptaSim || {};
 
 				// Hide the element if it's not active, and it's visible.
 				if (this.visible) {
-					self.visible = false;
-					$el.fadeOut('slow', function() { $el.remove(); });
+					this.visible = false;
+//					$el.remove();
+					$el.find('td > div').slideUp(function() { $el.remove(); });
 				}
 			}
 
