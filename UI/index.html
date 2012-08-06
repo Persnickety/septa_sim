@@ -62,7 +62,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="container">
 
       <div class="row">
         <div class="span8">
@@ -182,7 +182,10 @@ $(function(){
         initialCanvasHeight = 1* hstr.substring(0,hstr.length-2);
 		$("#zoom-in").click(onZoomin);
 		$("#zoom-out").click(onZoomout);
-
+		
+        $("#container").width("98%");
+        $(window).resize(resizeCanvas);        
+        resizeCanvas();
 
 		septaMapView.render();
 		allTripsView.render();
@@ -223,7 +226,9 @@ function onZoomout(){
     newScale = oldScale / 1.1;
     septaMapView.paper.scaleAll(newScale);
 }
-
+function resizeCanvas(){
+    $(".span8").width($("#container").width()-430)
+}
 
 </script>
 
