@@ -17,17 +17,17 @@ var SeptaSim = SeptaSim || {};
       this.selected = false;
       this.trigger('select');
     },
-    
-    updatePosition: function(stationCollection, time) {
-      var schedule = this.get('schedule');
-      
-      var fromStationInfo, toStationInfo;
+
+    // Get the stations that the train should be between according to its
+    // schedule.
+    getBoundingStationsInfo: function(stationCollection, time) {
+      var schedule = this.get('schedule'),
+          fromStationInfo, toStationInfo;
       
       fromStationInfo = schedule[0];
       
       for(var i=0; i<schedule.length; i++)
       {
-//      console.log(time, schedule[i][ARRIVAL_TIME])
         if(schedule[i][ARRIVAL_TIME] >= time)
         {
           toStationInfo = schedule[i];
@@ -37,33 +37,34 @@ var SeptaSim = SeptaSim || {};
         fromStationInfo = schedule[i];
       }
 
-      if (toStationInfo == undefined ||
-        fromStationInfo == toStationInfo) {
+      return [fromStationInfo, toStationInfo];
+    },
+    
+    updatePosition: function(stationCollection, time) {
+      var schedule = this.get('schedule'),
+          boundingStationsInfo = this.getBoundingStationsInfo(stationCollection, time),
+          fromStationInfo = boundingStationsInfo[0],
+          toStationInfo = boundingStationsInfo[1];
 
+      if (toStationInfo == undefined ||
+          fromStationInfo == toStationInfo) {
         this.set('active', false);
         return;
       };
 
-//    console.log(fromStationInfo, toStationInfo);
-      
-      var timeInterval = (time - fromStationInfo[ARRIVAL_TIME]) / (toStationInfo[ARRIVAL_TIME] - fromStationInfo[ARRIVAL_TIME]);
+      var interpolationFactor = (time - fromStationInfo[ARRIVAL_TIME]) / (toStationInfo[ARRIVAL_TIME] - fromStationInfo[ARRIVAL_TIME]);
       var fromStation = stationCollection.get(fromStationInfo[STOP_ID]);
       var toStation = stationCollection.get(toStationInfo[STOP_ID]);
-      var newLocation = stationCollection.getInterpolatedLocation(fromStation, toStation, timeInterval);
+      var newLocation = stationCollection.getInterpolatedLocation(fromStation, toStation, interpolationFactor);
       var outbound = (fromStationInfo[2] == 1);
 
-      if (fromStationInfo[STOP_ID] == 90701) {
-        this.set('trenton?', true, {silent: true});
-      } else {
-        this.set('trenton?', false, {silent: true});
-      }
-      
       var timeInMins = toStationInfo[ARRIVAL_TIME]*1;
       var timeObj = convertIntegerTimeIntoTimeObject(timeInMins);
       var timeString = timeObj.h + ":" + zeroFill(timeObj.m, 2);
 
       this.fromStation = fromStation;
       this.toStation = toStation;
+      this.interpolationFactor = interpolationFactor;
       
       this.set({
         'location': newLocation,
