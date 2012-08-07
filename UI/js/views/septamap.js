@@ -151,112 +151,112 @@ var SeptaSim = SeptaSim || {};
   });
 
   S.SeptaMapView = Backbone.View.extend({
-            initialize: function() {
+    initialize: function() {
 
-              var w = $('#septa-canvas').width();
-              var h = $('#septa-canvas').height();
+      var w = $('#septa-canvas').width();
+      var h = $('#septa-canvas').height();
 
-              this.paper = ScaleRaphael('septa-canvas', w, h);
-              this.width = w;
-              this.height = h;
+      this.paper = ScaleRaphael('septa-canvas', w, h);
+      this.width = w;
+      this.height = h;
 
-              this.stationCollection = this.options.stationCollection;
-              this.trainCollection = this.options.trainCollection;
+      this.stationCollection = this.options.stationCollection;
+      this.trainCollection = this.options.trainCollection;
 
-            },
+    },
 
-            // Returns a pair of x, y coordinates.
-            toMapCoords: function(lat, lon) {
-              var coords = {
-                x: lon,
-                y: -lat*2
-              };
-              return coords;
-            },
+    // Returns a pair of x, y coordinates.
+    toMapCoords: function(lat, lon) {
+      var coords = {
+        x: lon,
+        y: -lat*2
+      };
+      return coords;
+    },
 
-            setViewBox: function(minLat, minLon, maxLat, maxLon) {
-              this.paper.setViewBox(minLon, -maxLat*2, (maxLon - minLon), (maxLat - minLat)*2, true);
-            },
+    setViewBox: function(minLat, minLon, maxLat, maxLon) {
+      this.paper.setViewBox(minLon, -maxLat*2, (maxLon - minLon), (maxLat - minLat)*2, true);
+    },
 
-            render: function() {
+    render: function() {
 
-              var stationMarkers = {};
-              var paper = this.paper;
-              var mapSet = this.mapSet;
-              var toMapCoords = this.toMapCoords;
+      var stationMarkers = {};
+      var paper = this.paper;
+      var mapSet = this.mapSet;
+      var toMapCoords = this.toMapCoords;
 
-//              $.ajax({
-//                type: 'GET',
-//                url: 'http://septasim.onlinewebshop.net/stations_by_route.php',
-//                success: function(data) {
-//                    console.log(data);
-//                  }
-//              );
+//      $.ajax({
+//        type: 'GET',
+//        url: 'http://septasim.onlinewebshop.net/stations_by_route.php',
+//        success: function(data) {
+//            console.log(data);
+//          }
+//      );
 
-              var lats = this.stationCollection.pluck('stop_lat');
-              var lons = this.stationCollection.pluck('stop_lon');
-              this.setViewBox(_.min(lats), _.min(lons), _.max(lats), _.max(lons));
+      var lats = this.stationCollection.pluck('stop_lat');
+      var lons = this.stationCollection.pluck('stop_lon');
+      this.setViewBox(_.min(lats), _.min(lons), _.max(lats), _.max(lons));
 
-              this.drawRoutes(STATIONS);
+      this.drawRoutes(STATIONS);
 
-              this.stationCollection.each(function(station) {
-                var coords = toMapCoords(station.get('stop_lat'), station.get('stop_lon'))
-                var marker = paper.circle(coords.x, coords.y, 0.004).attr({
-                  'stroke': 'black',
-                  'stroke-width': 1,
-                  'fill': 'white'
-                });
+      this.stationCollection.each(function(station) {
+        var coords = toMapCoords(station.get('stop_lat'), station.get('stop_lon'))
+        var marker = paper.circle(coords.x, coords.y, 0.004).attr({
+          'stroke': 'black',
+          'stroke-width': 1,
+          'fill': 'white'
+        });
 
-                addTip(marker.node, station.get('stop_name'));
+        addTip(marker.node, station.get('stop_name'));
 
-                stationMarkers[station] = marker;
-              });
+        stationMarkers[station] = marker;
+      });
 
-              this.stationMarkers = stationMarkers;
+      this.stationMarkers = stationMarkers;
 
-              var vehicleMarkerViews = [];
-              var self = this;
-              this.trainCollection.each(function(train) {
-                var view = new S.VehicleMarkerView({
-                  paper: paper,
-                  mapView: self,
-                  model: train
-                });
-                vehicleMarkerViews[train] = view;
-              });
-              this.vehicleMarkerViews = vehicleMarkerViews;
-            },
+      var vehicleMarkerViews = [];
+      var self = this;
+      this.trainCollection.each(function(train) {
+        var view = new S.VehicleMarkerView({
+          paper: paper,
+          mapView: self,
+          model: train
+        });
+        vehicleMarkerViews[train] = view;
+      });
+      this.vehicleMarkerViews = vehicleMarkerViews;
+    },
 
-            drawRoutes: function(stations_by_route) {
-              var stationCollection = this.stationCollection;
-              var toMapCoords = this.toMapCoords;
-              var paper = this.paper;
+    drawRoutes: function(stations_by_route) {
+      var stationCollection = this.stationCollection;
+      var toMapCoords = this.toMapCoords;
+      var paper = this.paper;
 
-              var route_to_color = {'AIR':'#91456C', 'CHE':'#94763C', 'CHW':'#00B4B2','DOY':'#775B49','ELW':'#007CC8','FOX':'#FF823D','NOR':'#EE4C69','PAO':'#20825C','CYN':'#6F549E','TRE':'#F683C9','WAR':'#F7AF42','WIL':'#8AD16B','WTR':'#5D5EBC'};
+      var route_to_color = {'AIR':'#91456C', 'CHE':'#94763C', 'CHW':'#00B4B2','DOY':'#775B49','ELW':'#007CC8','FOX':'#FF823D','NOR':'#EE4C69','PAO':'#20825C','CYN':'#6F549E','TRE':'#F683C9','WAR':'#F7AF42','WIL':'#8AD16B','WTR':'#5D5EBC'};
 
-              for (route_id in stations_by_route) {
-                var pathCoords = '';
+      for (route_id in stations_by_route) {
+        var pathCoords = '';
 
-                _.each(stations_by_route[route_id], function(stop_id) {
-                  var station = stationCollection.get(stop_id);
-                  coords = toMapCoords(station.get('stop_lat'), station.get('stop_lon'));
+        _.each(stations_by_route[route_id], function(stop_id) {
+          var station = stationCollection.get(stop_id);
+          coords = toMapCoords(station.get('stop_lat'), station.get('stop_lon'));
 
-                  if (pathCoords === '') {
-                    pathCoords += 'M' + coords.x + ' ' + coords.y;
-                  } else {
-                    pathCoords += 'L' + coords.x + ' ' + coords.y;
-                  }
-                });
+          if (pathCoords === '') {
+            pathCoords += 'M' + coords.x + ' ' + coords.y;
+          } else {
+            pathCoords += 'L' + coords.x + ' ' + coords.y;
+          }
+        });
 
-                paper.path(pathCoords).attr({
-                  'stroke-width': 4,
-                  'stroke': route_to_color[route_id]
-                });
+        paper.path(pathCoords).attr({
+          'stroke-width': 4,
+          'stroke': route_to_color[route_id]
+        });
 
 
-              }
-            }
-          });
+      }
+    }
+  });
 
 
 })(SeptaSim, jQuery);
