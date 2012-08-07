@@ -111,7 +111,7 @@ var SeptaSim = SeptaSim || {};
     },
 
     render: function() {
-      if (this.model.get('active')) {
+      if (this.model.active) {
         var trainLocation = this.model.get('location');
         var coords = this.mapView.toMapCoords(trainLocation.lat, trainLocation.lon);
         var is_outbound = this.model.get('outbound?');

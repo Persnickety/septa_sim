@@ -18,6 +18,16 @@ var SeptaSim = SeptaSim || {};
       this.trigger('select');
     },
 
+    activate: function() {
+      this.active = true;
+      this.trigger('change');
+    },
+
+    deactivate: function() {
+      this.active = false;
+      this.trigger('change');
+    },
+
     // Get the stations that the train should be between according to its
     // schedule.
     getBoundingStationsInfo: function(stationCollection, time) {
@@ -48,7 +58,7 @@ var SeptaSim = SeptaSim || {};
 
       if (toStationInfo == undefined ||
           fromStationInfo == toStationInfo) {
-        this.set('active', false);
+        this.deactivate();
         return;
       };
 
@@ -68,12 +78,13 @@ var SeptaSim = SeptaSim || {};
       
       this.set({
         'location': newLocation,
-        'active': true,
         'outbound?': outbound,
         'routeName': this.id.substring(0,3),
         'nextStation': toStation.get('stop_name'),
         'arrivalTime': timeString
-        });
+        }, {silent: true});
+
+      this.activate();
     }, //end of updatePosition
 
     changeSchedule: function(stationID, incrementTimeBy) {

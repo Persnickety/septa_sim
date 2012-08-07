@@ -46,7 +46,7 @@ var SeptaSim = SeptaSim || {};
     tagName: 'tr',
     
     render: function() {
-      var is_active = this.model.get('active');
+      var is_active = this.model.active;
       
       if (is_active) {
         var routeName = this.model.get('routeName');
