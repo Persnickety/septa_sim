@@ -33,7 +33,7 @@ var SeptaSim = SeptaSim || {};
       this.isStarted = true;
       var $slider = $('#septa-time-slider');
       $slider.val(parseInt($slider.val()) + 1).change();
-      this.simContinuationId = _.delay(_.bind(this.continueSimulation, this), 300);
+      this.simContinuationId = _.delay(_.bind(this.continueSimulation, this), 100);
     },
 
     pauseSimulation: function() {

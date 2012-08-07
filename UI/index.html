@@ -182,9 +182,9 @@ $(function(){
         initialCanvasHeight = 1* hstr.substring(0,hstr.length-2);
 		$("#zoom-in").click(zoomin);
 		$("#zoom-out").click(zoomout);
-		
+
         $("#container").width("98%");
-        $(window).resize(resizeCanvas);        
+        $(window).resize(resizeCanvas);
         resizeCanvas();
         $(document).keypress(keyUp);
 
@@ -235,7 +235,7 @@ function resizeCanvas(){
 function keyUp(event){
     var k = event.keyCode;
     var c = event.charCode;
-    
+
     if(c == 32) { //space
         timeSliderView.toggleSimulation();
         return false;
