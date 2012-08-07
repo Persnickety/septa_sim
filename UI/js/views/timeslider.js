@@ -31,14 +31,18 @@ var SeptaSim = SeptaSim || {};
 
     continueSimulation: function() {
       this.isStarted = true;
-      var $slider = $('#septa-time-slider');
-      $slider.val(parseInt($slider.val()) + 1).change();
+      this.stepSimulation(1);
       this.simContinuationId = _.delay(_.bind(this.continueSimulation, this), 100);
     },
 
     pauseSimulation: function() {
       this.isStarted = false;
       clearTimeout(this.simContinuationId);
+    },
+
+    stepSimulation: function(steps) {
+      var $slider = $('#septa-time-slider');
+      $slider.val(parseInt($slider.val()) + steps).change();
     },
 
     onSliderChange: function(evt) {
