@@ -112,8 +112,20 @@ var SeptaSim = SeptaSim || {};
 
     render: function() {
       if (this.model.active) {
-        var trainLocation = this.model.get('location');
-        var coords = this.mapView.toMapCoords(trainLocation.lat, trainLocation.lon);
+        var fromStation = this.model.fromStation,
+            toStation = this.model.toStation,
+            interpolationFactor = this.model.interpolationFactor,
+            routeName = this.model.routeName,
+
+            path = this.mapView.routePaths[routeName],
+            fromStationLength = this.mapView.routePathLengths[routeName][fromStation.id],
+            toStationLength = this.mapView.routePathLengths[routeName][toStation.id],
+
+            segmentLength = toStationLength - fromStationLength,
+
+            trainLocation = path.getPointAtLength(segmentLength * interpolationFactor + fromStationLength),
+            coords = trainLocation;
+
         var is_outbound = this.model.get('outbound?');
         var block_id = this.model.get('block_id');
 

@@ -18,14 +18,20 @@ var SeptaSim = SeptaSim || {};
       this.trigger('select');
     },
 
-    activate: function() {
+    activate: function(options) {
       this.active = true;
-      this.trigger('change');
+
+      options = options || {};
+      if (!options.silent)
+        this.trigger('change');
     },
 
-    deactivate: function() {
+    deactivate: function(options) {
       this.active = false;
-      this.trigger('change');
+
+      options = options || {};
+      if (!options.silent)
+        this.trigger('change');
     },
 
     // Get the stations that the train should be between according to its
@@ -65,8 +71,8 @@ var SeptaSim = SeptaSim || {};
       var interpolationFactor = (time - fromStationInfo[ARRIVAL_TIME]) / (toStationInfo[ARRIVAL_TIME] - fromStationInfo[ARRIVAL_TIME]);
       var fromStation = stationCollection.get(fromStationInfo[STOP_ID]);
       var toStation = stationCollection.get(toStationInfo[STOP_ID]);
-      var newLocation = stationCollection.getInterpolatedLocation(fromStation, toStation, interpolationFactor);
       var outbound = (fromStationInfo[2] == 1);
+      var routeName = this.id.substring(0,3);
 
       var timeInMins = toStationInfo[ARRIVAL_TIME]*1;
       var timeObj = convertIntegerTimeIntoTimeObject(timeInMins);
@@ -75,11 +81,11 @@ var SeptaSim = SeptaSim || {};
       this.fromStation = fromStation;
       this.toStation = toStation;
       this.interpolationFactor = interpolationFactor;
+      this.routeName = routeName;
       
       this.set({
-        'location': newLocation,
         'outbound?': outbound,
-        'routeName': this.id.substring(0,3),
+        'routeName': routeName,
         'nextStation': toStation.get('stop_name'),
         'arrivalTime': timeString
         }, {silent: true});
