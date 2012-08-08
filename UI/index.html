@@ -245,6 +245,12 @@ function keyUp(event){
     } else if(c == 45 || c==95) { // - or _
         zoomout();
         return false;
+    } else if (c == 46 || c == 62) { // > or .
+        timeSliderView.stepSimulation(1);
+        return false;
+    } else if (c == 44 || c == 60) { // < or ,
+        timeSliderView.stepSimulation(-1);
+        return false;
     }
 //    console.log("key="+k+"  char="+c);
     return true;
